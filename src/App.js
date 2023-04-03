@@ -29,6 +29,7 @@ import Profile from "./Components/Profile/Profile";
 import UpdateProfile from "./Components/Profile/UpdateProfile";
 import Logout from "./Services/Logout/Logout";
 import Login from "./Services/Login/Login";
+import AddMember from "./Components/Members/AddMember";
 
 function App() {
   const [show, setShow] = useState(false);
@@ -292,6 +293,7 @@ function App() {
         <Route path="/" element={<Dashboard />}></Route>
         <Route path="/members" element={<Members />}></Route>
         <Route path="/update_members" element={<UpdateMember />}></Route>
+        <Route path="/add_members" element={<AddMember />}></Route>
         <Route path="/meal_list" element={<MealList />}></Route>
         <Route path="/update_meal_list" element={<UpdateMealList />}></Route>
         <Route path="/bazar_list" element={<BazarList />}></Route>

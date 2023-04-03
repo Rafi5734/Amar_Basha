@@ -7,8 +7,10 @@ import {
   OverlayTrigger,
   Tooltip,
   Form,
+  Dropdown,
 } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
+import { Link } from "react-router-dom";
 const Members = () => {
   const [show, setShow] = useState(false);
 
@@ -16,7 +18,21 @@ const Members = () => {
   const handleShow = () => setShow(true);
   return (
     <div className="members_main">
-      <h1 className="text-center pt-3  pb-3">All Members</h1>
+      <div className="d-flex flex-row justify-content-around">
+        <h1 className="text-center pt-3  pb-3">All Members</h1>
+        <OverlayTrigger
+          overlay={<Tooltip id="tooltip-disabled">Add Member</Tooltip>}
+        >
+          <span className="d-inline-block mt-4">
+            <Link to="/add_members">
+              <Button variant="primary">
+                <i class="fa-solid fa-plus"></i>
+              </Button>{" "}
+            </Link>
+          </span>
+        </OverlayTrigger>
+      </div>
+
       <Container className="overflow-auto">
         <Table striped bordered hover variant="dark">
           <thead>
@@ -38,7 +54,7 @@ const Members = () => {
               <td>01987654532</td>
               <td>Student</td>
               <td>SMUCT</td>
-              <td>
+              <td className="d-flex flex-row">
                 <OverlayTrigger
                   className=""
                   overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
@@ -128,12 +144,32 @@ const Members = () => {
                 <OverlayTrigger
                   overlay={<Tooltip id="tooltip-disabled">Delete</Tooltip>}
                 >
-                  <span className="d-inline-block">
+                  <span className="d-inline-block me-2">
                     <Button style={{ pointerEvents: "none" }}>
                       <i class="fa-solid fa-trash"></i>
                     </Button>
                   </span>
                 </OverlayTrigger>
+                <Dropdown>
+                  <OverlayTrigger
+                    overlay={<Tooltip id="tooltip-disabled">Make role</Tooltip>}
+                  >
+                    <span className="d-inline-block">
+                      <Dropdown.Toggle
+                        id="dropdown-button-dark-example1"
+                        variant="secondary"
+                      >
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                      </Dropdown.Toggle>
+                    </span>
+                  </OverlayTrigger>
+
+                  <Dropdown.Menu variant="dark">
+                    <Dropdown.Item>Make Member</Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item>Make Manager</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </td>
             </tr>
             <tr>
