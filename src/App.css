@@ -1,0 +1,13 @@
+* {
+    font-family: 'Poppins', sans-serif;
+font-family: 'Roboto Mono', monospace;
+color: #fff;
+}
+.navbar-toggler{
+    background-color: #fff !important;
+}
+.navbar-nav{
+    /* background-color:  */
+    padding-left: 10px !important;
+    margin-top: 10px !important;
+}
