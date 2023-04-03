@@ -52,7 +52,7 @@ const Dashboard = () => {
   return (
     <div style={{ backgroundColor: "#0f172a" }}>
       <Container>
-        <h1>
+        <h1 className="pt-3 pb-3">
           Dashboard - <span style={{ color: "#0ce7fa" }}>Today's</span>
         </h1>
         <div className="grid-wrapper">
