@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Button } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -14,8 +14,14 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Link } from "react-router-dom";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
 
 const Profile = () => {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const data = [
     {
       name: "Page A",
@@ -80,14 +86,96 @@ const Profile = () => {
                   <Button className="mb-3" variant="primary">
                     Change Image
                   </Button>{" "}
-                  <Button className="mb-3" variant="secondary">
-                    <Link
-                      className="text-decoration-none text-light"
-                      to="/update_profile"
-                    >
-                      Edit Profile
-                    </Link>
+                  <Button
+                    onClick={handleShow}
+                    className="mb-3"
+                    variant="secondary"
+                  >
+                    Edit Profile
                   </Button>{" "}
+                  <Modal show={show} onHide={handleClose}>
+                    <Modal.Header
+                      closeButton
+                      style={{ backgroundColor: "#334155" }}
+                    >
+                      <Modal.Title>Update Profile</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body style={{ backgroundColor: "#334155" }}>
+                      <Form>
+                        <Form.Group
+                          className="mb-3"
+                          controlId="exampleForm.ControlInput1"
+                        >
+                          <Form.Label>Name</Form.Label>
+                          <Form.Control
+                            type="text"
+                            placeholder="Change your name"
+                            autoFocus
+                          />
+                        </Form.Group>
+                        <Form.Group
+                          className="mb-3"
+                          controlId="exampleForm.ControlInput1"
+                        >
+                          <Form.Label>Member category</Form.Label>
+                          <Form.Select
+                            style={{
+                              backgroundColor: "#334155",
+                              color: "#fff",
+                            }}
+                            size="sm"
+                            aria-label="Default select example"
+                          >
+                            <option>Select a option</option>
+                            <option value="member">Member</option>
+                            <option value="manager">Manager</option>
+                            {/* <option value="3">Three</option> */}
+                          </Form.Select>
+                        </Form.Group>
+                        <Form.Group
+                          className="mb-3"
+                          controlId="exampleForm.ControlInput1"
+                        >
+                          <Form.Label>Email</Form.Label>
+                          <Form.Control
+                            type="email"
+                            placeholder="Change your email"
+                            autoFocus
+                          />
+                        </Form.Group>
+                        <Form.Group
+                          className="mb-3"
+                          controlId="exampleForm.ControlInput1"
+                        >
+                          <Form.Label>Phone</Form.Label>
+                          <Form.Control
+                            type="text"
+                            placeholder="Change your phone number"
+                            autoFocus
+                          />
+                        </Form.Group>
+                        <Form.Group
+                          className="mb-3"
+                          controlId="exampleForm.ControlInput1"
+                        >
+                          <Form.Label>Work Place</Form.Label>
+                          <Form.Control
+                            type="text"
+                            placeholder="Change your work place"
+                            autoFocus
+                          />
+                        </Form.Group>
+                      </Form>
+                    </Modal.Body>
+                    <Modal.Footer style={{ backgroundColor: "#334155" }}>
+                      <Button variant="secondary" onClick={handleClose}>
+                        Close
+                      </Button>
+                      <Button variant="primary" onClick={handleClose}>
+                        Save Changes
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
                 </div>
               </Col>
               <Col

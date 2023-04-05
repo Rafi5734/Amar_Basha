@@ -255,14 +255,6 @@ function App() {
                     </Link>
                   </Dropdown.Item>
                   <Dropdown.Divider />
-                  <Dropdown.Item>
-                    <Link
-                      className="text-decoration-none text-light"
-                      to="/update_profile"
-                    >
-                      Update Profile
-                    </Link>
-                  </Dropdown.Item>
                   <Dropdown.Divider />
                   <Dropdown.Item>
                     <Link
