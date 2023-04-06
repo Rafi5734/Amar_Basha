@@ -2,7 +2,6 @@ import "./App.css";
 import React, { useRef, useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import Dashboard from "./Pages/Dashboard/Dashboard";
-import AllMembers from "./Pages/All_Members/AllMembers";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -15,15 +14,7 @@ import UpdateMember from "./Components/Members/UpdateMember";
 import UpdateMealList from "./Components/MealList/UpdateMealList";
 import UpdateBazarList from "./Components/BazarList/updateBazarList";
 import UpdateDepositList from "./Components/DepositList/UpdateDeposit";
-import {
-  Badge,
-  Button,
-  Dropdown,
-  DropdownButton,
-  Overlay,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
+import { Badge, Button, Dropdown } from "react-bootstrap";
 import Notification from "./Pages/Notifications/Notification";
 import Profile from "./Components/Profile/Profile";
 import UpdateProfile from "./Components/Profile/UpdateProfile";
@@ -32,8 +23,6 @@ import Login from "./Services/Login/Login";
 import AddMember from "./Components/Members/AddMember";
 
 function App() {
-  const [show, setShow] = useState(false);
-  const target = useRef(null);
   return (
     <div className="App">
       <Navbar style={{ backgroundColor: "#1e293b" }} expand="lg" sticky="top">
