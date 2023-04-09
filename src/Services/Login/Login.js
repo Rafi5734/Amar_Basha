@@ -7,11 +7,21 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 const Login = () => {
   const [validated, setValidated] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (event) => {
+    event.preventDefault();
+    const logInData = {
+      name: name,
+      email: email,
+      password: password,
+      category: "member",
+    };
+    console.log(logInData);
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
     }
 
@@ -39,7 +49,11 @@ const Login = () => {
                 required
                 type="text"
                 placeholder="Enter your name"
-                defaultValue=""
+                name="name"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
               />
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               <Form.Control.Feedback type="invalid">
@@ -57,7 +71,11 @@ const Login = () => {
                 required
                 type="email"
                 placeholder="Enter your email address"
-                defaultValue=""
+                name="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
               />
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               <Form.Control.Feedback type="invalid">
@@ -77,6 +95,11 @@ const Login = () => {
                   placeholder="Enter your password"
                   aria-describedby="inputGroupPrepend"
                   required
+                  name="password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
                 />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">
