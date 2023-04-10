@@ -11,11 +11,14 @@ import {
 } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
+import { useGetUsersQuery } from "../../features/api/logInApiSlice";
 const Members = () => {
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const { data, isLoading, isError } = useGetUsersQuery();
+  console.log(data);
   return (
     <div className="members_main">
       <div className="d-flex flex-row justify-content-around">

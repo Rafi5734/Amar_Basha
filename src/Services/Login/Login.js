@@ -5,7 +5,9 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
+import { useGetUsersQuery } from "../../features/api/logInApiSlice";
 const Login = () => {
+  const { data: allUser, isLoading, isError } = useGetUsersQuery();
   const [validated, setValidated] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -17,9 +19,12 @@ const Login = () => {
       name: name,
       email: email,
       password: password,
-      category: "member",
     };
-    console.log(logInData);
+    console.log(name);
+    if (allUser) {
+      const matchUser = allUser.map((i) => i.userName === name);
+      console.log(matchUser.indexOf(true));
+    }
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.stopPropagation();

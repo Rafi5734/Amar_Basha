@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Container from "react-bootstrap/Container";
@@ -21,8 +21,16 @@ import UpdateProfile from "./Components/Profile/UpdateProfile";
 import Logout from "./Services/Logout/Logout";
 import Login from "./Services/Login/Login";
 import AddMember from "./Components/Members/AddMember";
+import { useGetUsersQuery } from "./features/api/logInApiSlice";
 
 function App() {
+  const { data: allUser, isLoading, isError } = useGetUsersQuery();
+
+  // console.log(allUser);
+
+  // if (allUser) {
+  //   allUser.map((i) => console.log(i.userName));
+  // }
   return (
     <div className="App">
       <Navbar style={{ backgroundColor: "#1e293b" }} expand="lg" sticky="top">
@@ -109,7 +117,10 @@ function App() {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu
-                  style={{ background: "#1e293b", border: "0.5px solid #fff" }}
+                  style={{
+                    background: "#1e293b",
+                    border: "0.5px solid #fff",
+                  }}
                   variant="dark"
                 >
                   <h5 className="text-light ps-3 pe-3 fw-bold mb-3">
@@ -232,7 +243,10 @@ function App() {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu
-                  style={{ background: "#1e293b", border: "0.5px solid #fff" }}
+                  style={{
+                    background: "#1e293b",
+                    border: "0.5px solid #fff",
+                  }}
                   variant="dark"
                 >
                   <Dropdown.Item>
@@ -264,7 +278,7 @@ function App() {
         <Container fluid>
           <Navbar.Collapse className="justify-content-end">
             <Button>
-              <i class="fa-regular fa-paper-plane"></i>
+              <i className="fa-regular fa-paper-plane"></i>
             </Button>
           </Navbar.Collapse>
         </Container>
