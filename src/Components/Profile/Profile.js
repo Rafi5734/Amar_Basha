@@ -184,10 +184,10 @@ const Profile = () => {
               >
                 <div className="">
                   <div className="d-flex justify-content-center align-items-center">
-                    <p>Waren Waden</p>
+                    <p className="fw-bold">Waren Waden</p>
                   </div>
                   <div>
-                    <p>member</p>
+                    <p className="fw-bold">member</p>
                   </div>
                 </div>
               </Col>
