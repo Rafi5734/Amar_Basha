@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect } from "react";
+import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Container from "react-bootstrap/Container";
@@ -21,10 +21,10 @@ import UpdateProfile from "./Components/Profile/UpdateProfile";
 import Logout from "./Services/Logout/Logout";
 import Login from "./Services/Login/Login";
 import AddMember from "./Components/Members/AddMember";
-import { useGetUsersQuery } from "./features/api/logInApiSlice";
+// import { useGetUsersQuery } from "./features/api/logInApiSlice";
 
 function App() {
-  const { data: allUser, isLoading, isError } = useGetUsersQuery();
+  // const { data: allUser, isLoading, isError } = useGetUsersQuery();
 
   // console.log(allUser);
 

@@ -18,7 +18,7 @@ const Members = () => {
   const handleShow = () => setShow(true);
 
   const { data, isLoading, isError } = useGetUsersQuery();
-  console.log(data);
+  console.log(data, isLoading, isError);
   return (
     <div className="members_main">
       <div className="d-flex flex-row justify-content-around">
