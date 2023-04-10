@@ -9,14 +9,109 @@ import {
   Form,
 } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
+import Pagination from "react-bootstrap/Pagination";
 const BazarList = () => {
   const [show, setShow] = useState(false);
+  const [addBazar, setAddBazar] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleAddBazarClose = () => setAddBazar(false);
+  const handleAddBazarShow = () => setAddBazar(true);
   return (
     <div className="bg_primary">
-      <h1 className="pt-3 pb-3">Current month bazar list: </h1>
+      <div className="d-flex flex-row justify-content-around">
+        <h1 className="pt-3 pb-3">Current month bazar list: </h1>
+        <OverlayTrigger
+          overlay={<Tooltip id="tooltip-disabled">Add bazar</Tooltip>}
+        >
+          <span className="d-inline-block mt-4">
+            <Button variant="primary" onClick={handleAddBazarShow}>
+              <i class="fa-solid fa-plus"></i>
+            </Button>{" "}
+            <Modal
+              className="w-100"
+              show={addBazar}
+              onHide={handleAddBazarClose}
+            >
+              <Modal.Header style={{ backgroundColor: "#1e293b" }} closeButton>
+                <Modal.Title>Add Bazar</Modal.Title>
+              </Modal.Header>
+              <Modal.Body style={{ backgroundColor: "#0f172a" }}>
+                <Form>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label>Date</Form.Label>
+                    <Form.Control
+                      type="date"
+                      placeholder="Enter bazar date"
+                      autoFocus
+                      value="0"
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter bazar member name"
+                      autoFocus
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label>Amount</Form.Label>
+                    <Form.Control
+                      type="number"
+                      placeholder="Enter bazar amount"
+                      autoFocus
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label>Given Amount</Form.Label>
+                    <Form.Control
+                      type="number"
+                      placeholder="Enter given amount"
+                      autoFocus
+                      value="0"
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label>Return Amount</Form.Label>
+                    <Form.Control
+                      type="number"
+                      placeholder="Enter return amount"
+                      autoFocus
+                      value="0"
+                    />
+                  </Form.Group>
+                </Form>
+              </Modal.Body>
+              <Modal.Footer style={{ backgroundColor: "#1e293b" }}>
+                <Button variant="secondary" onClick={handleAddBazarClose}>
+                  Close
+                </Button>
+                <Button variant="primary" onClick={handleAddBazarClose}>
+                  Save Changes
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </span>
+        </OverlayTrigger>
+      </div>
       <Container fluid className="overflow-auto">
         <Table striped bordered hover variant="dark">
           <thead>
@@ -437,6 +532,16 @@ const BazarList = () => {
             </tr>
           </tbody>
         </Table>
+        <Pagination>
+          <Pagination.Item>Prev</Pagination.Item>
+          <Pagination.Item>{1}</Pagination.Item>
+          <Pagination.Item>{2}</Pagination.Item>
+          <Pagination.Item>{3}</Pagination.Item>
+          <Pagination.Item active>{4}</Pagination.Item>
+          <Pagination.Item>{5}</Pagination.Item>
+          <Pagination.Item>{6}</Pagination.Item>
+          <Pagination.Item>Next</Pagination.Item>
+        </Pagination>
       </Container>
     </div>
   );

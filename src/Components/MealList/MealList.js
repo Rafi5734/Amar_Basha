@@ -11,12 +11,66 @@ import Table from "react-bootstrap/Table";
 
 const MealList = () => {
   const [show, setShow] = useState(false);
+  const [meal_add, setMeal_add] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleMealAddClose = () => setMeal_add(false);
+  const handleMealAddShow = () => setMeal_add(true);
   return (
     <div className="bg_primary">
-      <h1 className="pt-3 pb-3">Meal List current month:</h1>
+      <div>
+        <div className="d-flex flex-row justify-content-around">
+          <h1 className="pt-3 pb-3">Meal List current month:</h1>
+          <OverlayTrigger
+            overlay={<Tooltip id="tooltip-disabled">Add meal</Tooltip>}
+          >
+            <span className="d-inline-block mt-4">
+              <Button variant="primary" onClick={handleMealAddShow}>
+                <i class="fa-solid fa-plus"></i>
+              </Button>{" "}
+              <Modal
+                className="w-100"
+                show={meal_add}
+                onHide={handleMealAddClose}
+              >
+                <Modal.Header
+                  style={{ backgroundColor: "#1e293b" }}
+                  closeButton
+                >
+                  <Modal.Title>Add Meal</Modal.Title>
+                </Modal.Header>
+                <Modal.Body style={{ backgroundColor: "#0f172a" }}>
+                  <Form>
+                    <Form.Group
+                      className="mb-3"
+                      controlId="exampleForm.ControlInput1"
+                    >
+                      <Form.Label>Mark</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Enter add meal"
+                        autoFocus
+                        value="0"
+                      />
+                    </Form.Group>
+                  </Form>
+                </Modal.Body>
+                <Modal.Footer style={{ backgroundColor: "#1e293b" }}>
+                  <Button variant="secondary" onClick={handleMealAddClose}>
+                    Close
+                  </Button>
+                  <Button variant="primary" onClick={handleMealAddClose}>
+                    Save Changes
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </span>
+          </OverlayTrigger>
+        </div>
+      </div>
+
       <Container fluid className="overflow-auto">
         <Table striped bordered hover variant="dark">
           <thead>
