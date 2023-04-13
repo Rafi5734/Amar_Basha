@@ -27,6 +27,7 @@ const Login = () => {
           console.log(i)
           navigate("/");
           window.location.reload();
+          
         })
       }
     }
