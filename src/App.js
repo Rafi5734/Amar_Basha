@@ -28,13 +28,15 @@ import PrivateComponent from "./Layout/PrivateComponent";
 function App() {
   const navigate = useNavigate();
   const [role, setRole] = useState("")
+  const [name, setName] = useState("")
   const logInUser = localStorage.getItem("login_user");
   const convertData = JSON.parse(logInUser);
 
   useEffect(() => {
     if (logInUser) {
-      console.log(role)
+      
       setRole(convertData.category)
+      setName(convertData.userName)
     } else {
       // <Navigate to="/login"></Navigate>
     }
@@ -46,9 +48,6 @@ function App() {
     const removeUser = localStorage.removeItem('login_user');
     navigate("/login");
     window.location.reload();
-    // if (removeUser) {
-
-    // }
 
     console.log("click")
   }
@@ -69,13 +68,7 @@ function App() {
           <Navbar.Collapse id="basic-navbar-nav">
 
             <Nav className="ms-auto text-white">
-              {/* {
-              role === "member" ? <>
-                <p>I am from member</p>
-              </> : <><p>I am from manager</p></>
-            } */}
-
-
+              
               {
                 role === "member" &&
                 <>
@@ -274,7 +267,7 @@ function App() {
                         id="dropdown-basic"
                         className="border-0"
                       >
-                        <span>Waren Waden</span>
+                        <span>{name}</span>
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu
@@ -513,7 +506,7 @@ function App() {
                       id="dropdown-basic"
                       className="border-0"
                     >
-                      <span>Waren Waden</span>
+                      <span>{name}</span>
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu

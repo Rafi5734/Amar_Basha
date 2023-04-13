@@ -7,6 +7,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import { useGetUsersQuery } from "../../features/api/logInApiSlice";
 import { useNavigate } from "react-router-dom";
+import Spinner from 'react-bootstrap/Spinner';
 const Login = () => {
   const navigate = useNavigate();
   const [validated, setValidated] = useState(false);
@@ -27,7 +28,7 @@ const Login = () => {
           console.log(i)
           navigate("/");
           window.location.reload();
-          
+
         })
       }
     }
@@ -38,6 +39,11 @@ const Login = () => {
 
     setValidated(true);
   };
+  if (isLoading) {
+    return (<><Spinner animation="border" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </Spinner></>)
+  }
   return (
     <div
       className="bg_primary"
