@@ -14,7 +14,7 @@ const Login = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { data: allUser, isLoading, isError } = useGetUsersQuery(); // will use.
+  const { data: allUser, isLoading, isError } = useGetUsersQuery();
 
   const handleSubmit = (event) => {
     event.preventDefault();

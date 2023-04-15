@@ -8,12 +8,15 @@ import Row from "react-bootstrap/Row";
 import "./member.css";
 import axios from "axios";
 import baseURL from "../../config";
+import { useAddUserMutation } from "../../features/api/addUserApiSlice";
 
 const AddMember = () => {
+  const [addUser, data, isLoading, isError] = useAddUserMutation();
+  console.log(data);
   const [validated, setValidated] = useState(false);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState(0);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [userStatus, setUserStatus] = useState("");
   const [userCategory, setUserCategory] = useState("");
   const [userWorkPlace, setUserWorkPlace] = useState("");
@@ -26,17 +29,17 @@ const AddMember = () => {
     if (form.checkValidity() === false) {
       event.stopPropagation();
     }
-    axios
-      .post(`http://localhost:8000/add_user`, {
-        userName: userName,
-        email: userEmail,
-        phone: phoneNumber,
-        status: userStatus,
-        category: userCategory,
-        working_place: userWorkPlace,
-        password: password,
-      })
-      .then((result) => console.log(result));
+
+    addUser({
+      userName: userName,
+      email: userEmail,
+      phone: phoneNumber,
+      status: userStatus,
+      category: userCategory,
+      working_place: userWorkPlace,
+      password: password,
+    });
+
     setValidated(true);
   };
   return (

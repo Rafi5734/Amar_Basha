@@ -5,9 +5,11 @@ export const logInApiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8000",
   }),
+  tagTypes: ["add_user"],
   endpoints: (builder) => ({
     getUsers: builder.query({
       query: () => "/add_user",
+      providesTags: ["add_user"],
     }),
   }),
 });
