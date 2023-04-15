@@ -25,7 +25,7 @@ export default function UpdateMember() {
   const [password, setPassword] = useState(singleUserData?.password);
 
   const [updateSingleUser] = useUpdateSingleUserMutation();
-  console.log(updateSingleUser, isLoading);
+  // console.log(updateSingleUser, isLoading);
 
   const updateData = {
     userName: userName,

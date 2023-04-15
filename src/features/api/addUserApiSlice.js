@@ -40,6 +40,15 @@ export const addUserApiSlice = createApi({
       }),
       invalidatesTags: ["all_user"],
     }),
+
+    makeRole: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/add_user/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["all_user"],
+    }),
   }),
 });
 
@@ -48,4 +57,5 @@ export const {
   useGetSingleUserQuery,
   useUpdateSingleUserMutation,
   useDeleteUserMutation,
+  useMakeRoleMutation,
 } = addUserApiSlice;
