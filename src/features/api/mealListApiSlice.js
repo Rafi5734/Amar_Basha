@@ -36,6 +36,14 @@ export const mealListApiSlice = createApi({
       }),
       invalidatesTags: ["meal_list"],
     }),
+
+    deleteMealList: builder.mutation({
+      query: (id) => ({
+        url: `/meal_list/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["meal_list"],
+    }),
   }),
 });
 
@@ -44,4 +52,5 @@ export const {
   useGetMealListQuery,
   useGetSingleMealQuery,
   useUpdateSingleMealMutation,
+  useDeleteMealListMutation,
 } = mealListApiSlice;

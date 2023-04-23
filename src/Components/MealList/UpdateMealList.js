@@ -25,7 +25,6 @@ const UpdateMealList = () => {
     updateSingleMeal({ id, allMeal: formValues });
 
     console.log({ id, allMeal: formValues });
-    // console.log(singleMeal?.allMeal);
   };
 
   useEffect(() => {
@@ -45,7 +44,6 @@ const UpdateMealList = () => {
     const changingValue = { ...formValues };
     changingValue[name] = value;
     setFormValues(changingValue);
-    // setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
 
   return (

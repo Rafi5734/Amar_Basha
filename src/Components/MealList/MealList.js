@@ -2,13 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Button, Container, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
-import { useGetMealListQuery } from "../../features/api/mealListApiSlice";
+import {
+  useDeleteMealListMutation,
+  useGetMealListQuery,
+} from "../../features/api/mealListApiSlice";
 import { useGetUsersQuery } from "../../features/api/logInApiSlice";
 
 const MealList = () => {
   const [allMemberMeal, setAllMemberMeal] = useState([]);
   var count = 1;
   const { data: allMealList } = useGetMealListQuery();
+  const [deleteMealList] = useDeleteMealListMutation();
   const { data: allUser } = useGetUsersQuery();
 
   useEffect(() => {
@@ -28,7 +32,13 @@ const MealList = () => {
     setAllMemberMeal(totalMeals);
   }, [allMealList]);
 
-  console.log(allMemberMeal);
+  // here is the all meal quantity of each member..
+  // console.log(allMemberMeal);
+
+  const handleMealListDelete = (id) => {
+    deleteMealList(id);
+    console.log(id);
+  };
 
   return (
     <div className="bg_primary">
@@ -87,6 +97,17 @@ const MealList = () => {
                           <i className="fa-solid fa-pen-to-square"></i>
                         </Button>
                       </Link>
+                    </span>
+                  </OverlayTrigger>
+
+                  <OverlayTrigger
+                    className=""
+                    overlay={<Tooltip id="tooltip-disabled">Delete</Tooltip>}
+                  >
+                    <span className="d-inline-block me-2">
+                      <Button onClick={() => handleMealListDelete(meal?._id)}>
+                        <i className="fa-solid fa-trash"></i>
+                      </Button>
                     </span>
                   </OverlayTrigger>
                 </td>
