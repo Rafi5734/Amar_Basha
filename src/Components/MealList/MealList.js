@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container, OverlayTrigger, Tooltip } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  OverlayTrigger,
+  Placeholder,
+  Tooltip,
+} from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 import {
@@ -11,7 +17,7 @@ import { useGetUsersQuery } from "../../features/api/logInApiSlice";
 const MealList = () => {
   const [allMemberMeal, setAllMemberMeal] = useState([]);
   var count = 1;
-  const { data: allMealList } = useGetMealListQuery();
+  const { data: allMealList, isFetching } = useGetMealListQuery();
   const [deleteMealList] = useDeleteMealListMutation();
   const { data: allUser } = useGetUsersQuery();
 
@@ -37,7 +43,7 @@ const MealList = () => {
 
   const handleMealListDelete = (id) => {
     deleteMealList(id);
-    console.log(id);
+    // console.log(id);
   };
 
   return (
@@ -59,70 +65,141 @@ const MealList = () => {
         </div>
       </div>
 
-      <Container fluid className="overflow-auto">
-        <Table striped bordered hover variant="dark">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th colSpan={allUser?.length}>Name</th>
-              {/* <th>Total</th> */}
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td></td>
-              {allUser?.map((name) => (
-                <td key={name._id}>{name?.userName}</td>
-              ))}
-              <td></td>
-            </tr>
+      {isFetching ? (
+        <>
+          <Placeholder as="p" animation="glow">
+            <Placeholder
+              style={{
+                width: "100%",
+                height: "100px",
+                borderRadius: "5px",
+              }}
+              xs={12}
+            />
+          </Placeholder>
+          <Placeholder as="p" animation="glow">
+            <Placeholder
+              style={{
+                width: "100%",
+                height: "100px",
+                borderRadius: "5px",
+              }}
+              xs={12}
+            />
+          </Placeholder>
+          <Placeholder as="p" animation="glow">
+            <Placeholder
+              style={{
+                width: "100%",
+                height: "100px",
+                borderRadius: "5px",
+              }}
+              xs={12}
+            />
+          </Placeholder>
+          <Placeholder as="p" animation="glow">
+            <Placeholder
+              style={{
+                width: "100%",
+                height: "100px",
+                borderRadius: "5px",
+              }}
+              xs={12}
+            />
+          </Placeholder>
+          <Placeholder as="p" animation="glow">
+            <Placeholder
+              style={{
+                width: "100%",
+                height: "100px",
+                borderRadius: "5px",
+              }}
+              xs={12}
+            />
+          </Placeholder>
+          <Placeholder as="p" animation="glow">
+            <Placeholder
+              style={{
+                width: "100%",
+                height: "100px",
+                borderRadius: "5px",
+              }}
+              xs={12}
+            />
+          </Placeholder>
+        </>
+      ) : (
+        <>
+          <Container fluid className="overflow-auto">
+            <Table striped bordered hover variant="dark">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th colSpan={allUser?.length}>Name</th>
+                  {/* <th>Total</th> */}
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  {allUser?.map((name) => (
+                    <td key={name._id}>{name?.userName}</td>
+                  ))}
+                  <td></td>
+                </tr>
 
-            {allMealList?.map((meal) => (
-              <tr key={meal?._id}>
-                <td>
-                  #{count++}; {meal?.date}
-                </td>
-                {Object.keys(meal?.allMeal)?.map((key) => (
-                  <td key={key?._id}>{meal?.allMeal[key]}</td>
+                {allMealList?.map((meal) => (
+                  <tr key={meal?._id}>
+                    <td>
+                      #{count++}; {meal?.date}
+                    </td>
+                    {Object.keys(meal?.allMeal)?.map((key) => (
+                      <td key={key?._id}>{meal?.allMeal[key]}</td>
+                    ))}
+                    <td>
+                      <OverlayTrigger
+                        className=""
+                        overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
+                      >
+                        <span className="d-inline-block me-2">
+                          <Link to={`/update_meal_list/${meal?._id}`}>
+                            <Button>
+                              <i className="fa-solid fa-pen-to-square"></i>
+                            </Button>
+                          </Link>
+                        </span>
+                      </OverlayTrigger>
+
+                      <OverlayTrigger
+                        className=""
+                        overlay={
+                          <Tooltip id="tooltip-disabled">Delete</Tooltip>
+                        }
+                      >
+                        <span className="d-inline-block me-2">
+                          <Button
+                            onClick={() => handleMealListDelete(meal?._id)}
+                          >
+                            <i className="fa-solid fa-trash"></i>
+                          </Button>
+                        </span>
+                      </OverlayTrigger>
+                    </td>
+                  </tr>
                 ))}
-                <td>
-                  <OverlayTrigger
-                    className=""
-                    overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
-                  >
-                    <span className="d-inline-block me-2">
-                      <Link to={`/update_meal_list/${meal?._id}`}>
-                        <Button>
-                          <i className="fa-solid fa-pen-to-square"></i>
-                        </Button>
-                      </Link>
-                    </span>
-                  </OverlayTrigger>
 
-                  <OverlayTrigger
-                    className=""
-                    overlay={<Tooltip id="tooltip-disabled">Delete</Tooltip>}
-                  >
-                    <span className="d-inline-block me-2">
-                      <Button onClick={() => handleMealListDelete(meal?._id)}>
-                        <i className="fa-solid fa-trash"></i>
-                      </Button>
-                    </span>
-                  </OverlayTrigger>
-                </td>
-              </tr>
-            ))}
-
-            <tr>
-              <td>Total</td>
-              {Object.keys(allMemberMeal)?.map((key) => (
-                <td key={key?._id}> = {allMemberMeal[key]}</td>
-              ))}
-            </tr>
-          </tbody>
-        </Table>
-      </Container>
+                <tr>
+                  <td>Total</td>
+                  {Object.keys(allMemberMeal)?.map((key) => (
+                    <td key={key?._id}> = {allMemberMeal[key]}</td>
+                  ))}
+                </tr>
+              </tbody>
+            </Table>
+          </Container>
+        </>
+      )}
     </div>
   );
 };
