@@ -1,129 +1,94 @@
-import React, { useState } from "react";
-import {
-  Button,
-  Form,
-  InputGroup,
-  Row,
-  Col,
-  Container,
-  Placeholder,
-} from "react-bootstrap";
-import { useParams, useNavigate } from "react-router-dom";
-import {
-  useGetSingleUserQuery,
-  useUpdateSingleUserMutation,
-} from "../../../features/api/addUserApiSlice";
+import React, { useEffect, useState } from "react";
+import { Container, Row, Form, InputGroup, Button, Col } from "react-bootstrap";
+import { useAddMealMutation } from "../../features/api/mealListApiSlice";
+import { useGetUsersQuery } from "../../features/api/logInApiSlice";
 
-export default function UpdateMember() {
-  const navigate = useNavigate();
-  let { id } = useParams();
-  const {
-    data: singleUserData,
-    isFetching,
-    isError,
-  } = useGetSingleUserQuery(id);
+export default function AddNewMeal() {
   const [validated, setValidated] = useState(false);
-  const [userName, setUserName] = useState(singleUserData?.userName);
-  const [userEmail, setUserEmail] = useState(singleUserData?.email);
-  const [phoneNumber, setPhoneNumber] = useState(singleUserData?.phone);
-  const [userStatus, setUserStatus] = useState(singleUserData?.status);
-  const [userCategory, setUserCategory] = useState(singleUserData?.category);
-  const [userWorkPlace, setUserWorkPlace] = useState(
-    singleUserData?.working_place
-  );
-  const [password, setPassword] = useState(singleUserData?.password);
+  const [addMeal, { isFetching, isError }] = useAddMealMutation();
+  const { data: allUsers, isLoading } = useGetUsersQuery();
+  const [formValues, setFormValues] = useState();
 
-  const [updateSingleUser] = useUpdateSingleUserMutation();
-  // console.log(updateSingleUser, isLoading);
-
-  const updateData = {
-    userName: userName,
-    email: userEmail,
-    phone: phoneNumber,
-    status: userStatus,
-    category: userCategory,
-    working_place: userWorkPlace,
-    password: password,
-  };
+  // console.log(allUsers);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.stopPropagation();
+    } else {
+      addMeal(formValues);
+      setValidated(true);
     }
 
-    // console.log(updateData);
+    // if (validated) {
 
-    updateSingleUser({
-      id,
-      data: {
-        userName: userName,
-        email: userEmail,
-        phone: phoneNumber,
-        status: userStatus,
-        category: userCategory,
-        working_place: userWorkPlace,
-        password: password,
-      },
-    });
+    // }
 
-    // console.log({
-    //   id,
-    //   data: {
-    //     userName: userName,
-    //     email: userEmail,
-    //     phone: phoneNumber,
-    //     status: userStatus,
-    //     category: userCategory,
-    //     working_place: userWorkPlace,
-    //     password: password,
-    //   },
-    // });
-    navigate("/members");
-    window.location.reload();
-
-    setValidated(true);
+    console.log(formValues);
   };
+
+  const handleOnChange = (e) => {
+    setFormValues({ ...formValues, [e.target.name]: e.target.value });
+  };
+
   return (
     <div>
       <div className="bg_primary add_member_form">
-        <Container className="mb-5">
-          <div>
-            <h1 className="text-center pt-3 pb-3">
-              Update Member Info - {singleUserData?.userName}
-            </h1>
-          </div>
-
-          {isFetching ? (
-            <>
-              <Placeholder as="p" animation="glow">
-                <Placeholder xs={12} />
-              </Placeholder>
-              <Placeholder as="p" animation="glow">
-                <Placeholder xs={12} />
-              </Placeholder>
-              <Placeholder as="p" animation="glow">
-                <Placeholder xs={12} />
-              </Placeholder>
-              <Placeholder as="p" animation="glow">
-                <Placeholder xs={12} />
-              </Placeholder>
-              <Placeholder as="p" animation="glow">
-                <Placeholder xs={12} />
-              </Placeholder>
-              <Placeholder as="p" animation="glow">
-                <Placeholder xs={12} />
-              </Placeholder>
-              <Placeholder as="p" animation="glow">
-                <Placeholder xs={12} />
-              </Placeholder>
-              <Placeholder as="p" animation="glow">
-                <Placeholder xs={12} />
-              </Placeholder>
-            </>
-          ) : (
-            <>
+        <h1 className="pt-3 pb-3 text-center">Add New Meal</h1>
+        <>
+          <Container className="mb-5">
+            <Form
+              className="background_color_secondary p-3 rounded"
+              noValidate
+              validated={validated}
+              onSubmit={handleSubmit}
+            >
+              <Row className="mb-3">
+                {/* {allUsers.map((i) => (
+                  <p>input</p>
+                ))} */}
+                {allUsers?.map((i) => (
+                  <Form.Group
+                    key={i._id}
+                    className="mb-3"
+                    as={Col}
+                    md="4"
+                    controlId="validationCustom01"
+                  >
+                    <Form.Label>{i.userName}</Form.Label>
+                    <Form.Control
+                      required
+                      type="number"
+                      placeholder={`Enter the ${i.userName} meal quantity`}
+                      name={i.userName}
+                      defaultValue=""
+                      onChange={handleOnChange}
+                    />
+                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">
+                      Please choose a username.
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                ))}
+              </Row>
+              <Button type="submit">Add Member</Button>
+            </Form>
+          </Container>
+        </>
+        {/* {isLoading ? (
+          <>
+            <Placeholder xs={4} />
+            <Placeholder xs={4} />
+            <Placeholder xs={4} />
+            <Placeholder xs={4} />
+            <Placeholder xs={4} />
+            <Placeholder xs={4} />
+            <Placeholder xs={4} />
+          </>
+        ) : (
+          <>
+            <Container className="mb-5">
               <Form
                 className="background_color_secondary p-3 rounded"
                 noValidate
@@ -138,8 +103,9 @@ export default function UpdateMember() {
                       type="text"
                       placeholder="Enter member name"
                       name="userName"
-                      defaultValue={singleUserData?.userName}
-                      onChange={(e) => setUserName(e.target.value)}
+                      onChange={(e) => {
+                        setUserName(e.target.value);
+                      }}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     <Form.Control.Feedback type="invalid">
@@ -162,8 +128,7 @@ export default function UpdateMember() {
                         placeholder="Enter member email address"
                         aria-describedby="inputGroupPrepend"
                         required
-                        name="email"
-                        defaultValue={singleUserData?.email}
+                        name="userEmail"
                         onChange={(e) => setUserEmail(e.target.value)}
                       />
                       <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -178,8 +143,7 @@ export default function UpdateMember() {
                       type="number"
                       placeholder="Enter member phone number"
                       required
-                      name="phone"
-                      defaultValue={singleUserData?.phone}
+                      name="phoneNumber"
                       onChange={(e) => setPhoneNumber(e.target.value)}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -195,8 +159,7 @@ export default function UpdateMember() {
                       type="text"
                       placeholder="Enter member status"
                       required
-                      name="status"
-                      defaultValue={singleUserData?.status}
+                      name="userStatus"
                       onChange={(e) => setUserStatus(e.target.value)}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -207,8 +170,7 @@ export default function UpdateMember() {
                   <Form.Group as={Col} md="4" controlId="validationCustom04">
                     <Form.Label>Category</Form.Label>
                     <Form.Select
-                      name="category"
-                      defaultValue={singleUserData?.category}
+                      name="userCategory"
                       onChange={(e) => setUserCategory(e.target.value)}
                       aria-label="Default select example"
                     >
@@ -239,8 +201,7 @@ export default function UpdateMember() {
                       type="text"
                       placeholder="Enter member work place"
                       required
-                      name="working_place"
-                      defaultValue={singleUserData?.working_place}
+                      name="userWorkPlace"
                       onChange={(e) => setUserWorkPlace(e.target.value)}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -259,8 +220,7 @@ export default function UpdateMember() {
                       type="text"
                       placeholder="Enter member password"
                       required
-                      name="password"
-                      defaultValue={singleUserData?.password}
+                      name="userWorkPlace"
                       onChange={(e) => setPassword(e.target.value)}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -269,11 +229,11 @@ export default function UpdateMember() {
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Row>
-                <Button type="submit">Update Member</Button>
+                <Button type="submit">Add Member</Button>
               </Form>
-            </>
-          )}
-        </Container>
+            </Container>
+          </>
+        )} */}
       </div>
     </div>
   );

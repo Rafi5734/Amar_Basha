@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 const AddMember = () => {
   const navigate = useNavigate();
   const [addUser, data, isLoading, isError] = useAddUserMutation();
-  console.log(data);
+  // console.log(data);
   const [validated, setValidated] = useState(false);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");

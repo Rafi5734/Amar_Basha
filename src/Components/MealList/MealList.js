@@ -1,23 +1,35 @@
-import React, { useState } from "react";
-import {
-  Button,
-  Container,
-  Form,
-  Modal,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Container, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
+import { Link } from "react-router-dom";
+import { useGetMealListQuery } from "../../features/api/mealListApiSlice";
+import { useGetUsersQuery } from "../../features/api/logInApiSlice";
 
 const MealList = () => {
-  const [show, setShow] = useState(false);
-  const [meal_add, setMeal_add] = useState(false);
+  const [allMemberMeal, setAllMemberMeal] = useState([]);
+  var count = 1;
+  const { data: allMealList } = useGetMealListQuery();
+  const { data: allUser } = useGetUsersQuery();
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  useEffect(() => {
+    const sumAllMeals = (array) => {
+      const mealKeys = Object.keys(array[0]?.allMeal || {});
+      const totalMeals = mealKeys.reduce((acc, key) => {
+        const sum = array.reduce((sum, obj) => {
+          const mealValue = obj?.allMeal?.[key] || 0;
+          return sum + Number(mealValue);
+        }, 0);
+        return { ...acc, [key]: sum };
+      }, {});
+      return totalMeals;
+    };
 
-  const handleMealAddClose = () => setMeal_add(false);
-  const handleMealAddShow = () => setMeal_add(true);
+    const totalMeals = sumAllMeals(allMealList || []);
+    setAllMemberMeal(totalMeals);
+  }, [allMealList]);
+
+  console.log(allMemberMeal);
+
   return (
     <div className="bg_primary">
       <div>
@@ -27,45 +39,11 @@ const MealList = () => {
             overlay={<Tooltip id="tooltip-disabled">Add meal</Tooltip>}
           >
             <span className="d-inline-block mt-4">
-              <Button variant="primary" onClick={handleMealAddShow}>
-                <i class="fa-solid fa-plus"></i>
-              </Button>{" "}
-              <Modal
-                className="w-100"
-                show={meal_add}
-                onHide={handleMealAddClose}
-              >
-                <Modal.Header
-                  style={{ backgroundColor: "#1e293b" }}
-                  closeButton
-                >
-                  <Modal.Title>Add Meal</Modal.Title>
-                </Modal.Header>
-                <Modal.Body style={{ backgroundColor: "#0f172a" }}>
-                  <Form>
-                    <Form.Group
-                      className="mb-3"
-                      controlId="exampleForm.ControlInput1"
-                    >
-                      <Form.Label>Mark</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Enter add meal"
-                        autoFocus
-                        value="0"
-                      />
-                    </Form.Group>
-                  </Form>
-                </Modal.Body>
-                <Modal.Footer style={{ backgroundColor: "#1e293b" }}>
-                  <Button variant="secondary" onClick={handleMealAddClose}>
-                    Close
-                  </Button>
-                  <Button variant="primary" onClick={handleMealAddClose}>
-                    Save Changes
-                  </Button>
-                </Modal.Footer>
-              </Modal>
+              <Link to="/add_new_meal">
+                <Button variant="primary">
+                  <i className="fa-solid fa-plus"></i>
+                </Button>{" "}
+              </Link>
             </span>
           </OverlayTrigger>
         </div>
@@ -76,267 +54,50 @@ const MealList = () => {
           <thead>
             <tr>
               <th>#</th>
-              <th colSpan={9}>Name</th>
-              <th>Total</th>
+              <th colSpan={allUser?.length}>Name</th>
+              {/* <th>Total</th> */}
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td></td>
-              <td>Mark</td>
-              <td>Shanewaz</td>
-              <td>Pranto</td>
-              <td>Reza</td>
-              <td>Rafi</td>
-              <td>Almas</td>
-              <td>Piam</td>
-              <td>Dev</td>
-              <td>Asif</td>
-              <td></td>
+              {allUser?.map((name) => (
+                <td key={name._id}>{name?.userName}</td>
+              ))}
               <td></td>
             </tr>
-            <tr>
-              <td>#1; 4/3/2023</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td> = 18</td>
-              <td className="d-flex flex-row">
-                <OverlayTrigger
-                  className=""
-                  overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
-                >
-                  <span className="d-inline-block me-2">
-                    <Button onClick={handleShow}>
-                      <i className="fa-solid fa-pen-to-square"></i>
-                    </Button>
 
-                    <Modal className="w-100" show={show} onHide={handleClose}>
-                      <Modal.Header
-                        style={{ backgroundColor: "#1e293b" }}
-                        closeButton
-                      >
-                        <Modal.Title>Update Meal</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body style={{ backgroundColor: "#0f172a" }}>
-                        <Form>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Mark</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter update name"
-                              autoFocus
-                              value="1 + 1"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Mark</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter update name"
-                              autoFocus
-                              value="1 + 1"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Mark</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter update name"
-                              autoFocus
-                              value="1 + 1"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Mark</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter update name"
-                              autoFocus
-                              value="1 + 1"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Mark</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter update name"
-                              autoFocus
-                              value="1 + 1"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Mark</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter update name"
-                              autoFocus
-                              value="1 + 1"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Mark</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter update name"
-                              autoFocus
-                              value="1 + 1"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Mark</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter update name"
-                              autoFocus
-                              value="1 + 1"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Mark</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter update name"
-                              autoFocus
-                              value="1 + 1"
-                            />
-                          </Form.Group>
-                        </Form>
-                      </Modal.Body>
-                      <Modal.Footer style={{ backgroundColor: "#1e293b" }}>
-                        <Button variant="secondary" onClick={handleClose}>
-                          Close
+            {allMealList?.map((meal) => (
+              <tr key={meal?._id}>
+                <td>
+                  #{count++}; {meal?.date}
+                </td>
+                {Object.keys(meal?.allMeal)?.map((key) => (
+                  <td key={key?._id}>{meal?.allMeal[key]}</td>
+                ))}
+                <td>
+                  <OverlayTrigger
+                    className=""
+                    overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
+                  >
+                    <span className="d-inline-block me-2">
+                      <Link to={`/update_meal_list/${meal?._id}`}>
+                        <Button>
+                          <i className="fa-solid fa-pen-to-square"></i>
                         </Button>
-                        <Button variant="primary" onClick={handleClose}>
-                          Save Changes
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
-                  </span>
-                </OverlayTrigger>
-                <OverlayTrigger
-                  overlay={<Tooltip id="tooltip-disabled">Delete</Tooltip>}
-                >
-                  <span className="d-inline-block me-2">
-                    <Button style={{ pointerEvents: "none" }}>
-                      <i class="fa-solid fa-trash"></i>
-                    </Button>
-                  </span>
-                </OverlayTrigger>
-              </td>
-            </tr>
-            <tr>
-              <td>#1; 4/3/2023</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td> = 18</td>
-            </tr>
-            <tr>
-              <td>#1; 4/3/2023</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td> = 18</td>
-            </tr>
-            <tr>
-              <td>#1; 4/3/2023</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td> = 18</td>
-            </tr>
-            <tr>
-              <td>#1; 4/3/2023</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td> = 18</td>
-            </tr>
+                      </Link>
+                    </span>
+                  </OverlayTrigger>
+                </td>
+              </tr>
+            ))}
 
             <tr>
-              <td>#1; 4/3/2023</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td>1 + 1</td>
-              <td> = 18</td>
-            </tr>
-            <tr>
-              <td>Total Meal Per Person:</td>
-              <td>20</td>
-              <td>30</td>
-              <td>40</td>
-              <td>50</td>
-              <td>60</td>
-              <td>60</td>
-              <td>60</td>
-              <td>60</td>
-              <td>60</td>
-              <td> = 180</td>
+              <td>Total</td>
+              {Object.keys(allMemberMeal)?.map((key) => (
+                <td key={key?._id}> = {allMemberMeal[key]}</td>
+              ))}
             </tr>
           </tbody>
         </Table>

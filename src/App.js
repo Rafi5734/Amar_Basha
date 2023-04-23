@@ -23,6 +23,7 @@ import AddMember from "./Components/Members/AddMember";
 import { useNavigate } from "react-router-dom";
 import PrivateComponent from "./Layout/PrivateComponent";
 import UpdateMember from "./Components/Members/UpdateMember/UpdateMember";
+import AddNewMeal from "./Components/MealList/AddNewMeal";
 // import { useGetUsersQuery } from "./features/api/logInApiSlice";
 
 function App() {
@@ -37,10 +38,10 @@ function App() {
       setRole(convertData.category);
       setName(convertData.userName);
     }
-  }, []);
+  }, [convertData.category, convertData.userName, logInUser]);
 
   const handleLogout = () => {
-    const removeUser = localStorage.removeItem("login_user");
+    localStorage.removeItem("login_user");
     navigate("/login");
     window.location.reload();
 
@@ -772,7 +773,11 @@ function App() {
           <Route path="/add_members" element={<AddMember />}></Route>
           <Route path="/add_members/:id" element={<UpdateMember />}></Route>
           <Route path="/meal_list" element={<MealList />}></Route>
-          <Route path="/update_meal_list" element={<UpdateMealList />}></Route>
+          <Route path="/add_new_meal" element={<AddNewMeal />}></Route>
+          <Route
+            path="/update_meal_list/:id"
+            element={<UpdateMealList />}
+          ></Route>
           <Route path="/bazar_list" element={<BazarList />}></Route>
           <Route
             path="/update_bazar_list"
