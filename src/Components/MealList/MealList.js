@@ -3,6 +3,7 @@ import {
   Button,
   Container,
   OverlayTrigger,
+  Pagination,
   Placeholder,
   Tooltip,
 } from "react-bootstrap";
@@ -13,11 +14,14 @@ import {
   useGetMealListQuery,
 } from "../../features/api/mealListApiSlice";
 import { useGetUsersQuery } from "../../features/api/logInApiSlice";
+import ReactPaginate from "react-paginate";
 
 const MealList = () => {
   const [allMemberMeal, setAllMemberMeal] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
   var count = 1;
-  const { data: allMealList, isFetching } = useGetMealListQuery();
+  const { data: allMealList, isFetching } = useGetMealListQuery(pageNumber);
   const [deleteMealList] = useDeleteMealListMutation();
   const { data: allUser } = useGetUsersQuery();
 
@@ -38,12 +42,13 @@ const MealList = () => {
     setAllMemberMeal(totalMeals);
   }, [allMealList]);
 
-  // here is the all meal quantity of each member..
-  // console.log(allMemberMeal);
-
   const handleMealListDelete = (id) => {
     deleteMealList(id);
     // console.log(id);
+  };
+
+  const handlePageClick = (event) => {
+    setPageNumber(event.selected + 1);
   };
 
   return (
@@ -157,18 +162,15 @@ const MealList = () => {
                     {Object.keys(meal?.allMeal)?.map((key) => (
                       <td key={key?._id}>{meal?.allMeal[key]}</td>
                     ))}
-                    <td>
+                    <td className="d-flex justify-content-around">
                       <OverlayTrigger
-                        className=""
                         overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
                       >
-                        <span className="d-inline-block me-2">
-                          <Link to={`/update_meal_list/${meal?._id}`}>
-                            <Button>
-                              <i className="fa-solid fa-pen-to-square"></i>
-                            </Button>
-                          </Link>
-                        </span>
+                        <Link to={`/update_meal_list/${meal?._id}`}>
+                          <Button className="me-2">
+                            <i className="fa-solid fa-pen-to-square"></i>
+                          </Button>
+                        </Link>
                       </OverlayTrigger>
 
                       <OverlayTrigger
@@ -177,13 +179,9 @@ const MealList = () => {
                           <Tooltip id="tooltip-disabled">Delete</Tooltip>
                         }
                       >
-                        <span className="d-inline-block me-2">
-                          <Button
-                            onClick={() => handleMealListDelete(meal?._id)}
-                          >
-                            <i className="fa-solid fa-trash"></i>
-                          </Button>
-                        </span>
+                        <Button onClick={() => handleMealListDelete(meal?._id)}>
+                          <i className="fa-solid fa-trash"></i>
+                        </Button>
                       </OverlayTrigger>
                     </td>
                   </tr>
@@ -197,6 +195,26 @@ const MealList = () => {
                 </tr>
               </tbody>
             </Table>
+            <ReactPaginate
+              nextLabel=">"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={3}
+              marginPagesDisplayed={2}
+              pageCount={3}
+              previousLabel="<"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              breakLabel="..."
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              activeClassName="active"
+              renderOnZeroPageCount={null}
+            />
           </Container>
         </>
       )}
