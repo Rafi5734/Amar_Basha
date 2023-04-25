@@ -12,13 +12,31 @@ import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
 const BazarList = () => {
   const [show, setShow] = useState(false);
+  const [validated, setValidated] = useState(false);
   const [addBazar, setAddBazar] = useState(false);
+  const [bazarAdd, setBazarAdd] = useState();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const handleAddBazarClose = () => setAddBazar(false);
   const handleAddBazarShow = () => setAddBazar(true);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+    } else {
+      setValidated(true);
+    }
+
+    console.log(bazarAdd);
+  };
+
+  const handleOnChange = (e) => {
+    setBazarAdd({ ...bazarAdd, [e.target.name]: e.target.value });
+  };
   return (
     <div className="bg_primary">
       <div className="d-flex flex-row justify-content-around">
@@ -28,7 +46,7 @@ const BazarList = () => {
         >
           <span className="d-inline-block mt-4">
             <Button variant="primary" onClick={handleAddBazarShow}>
-              <i class="fa-solid fa-plus"></i>
+              <i className="fa-solid fa-plus"></i>
             </Button>{" "}
             <Modal
               className="w-100"
@@ -38,8 +56,10 @@ const BazarList = () => {
               <Modal.Header style={{ backgroundColor: "#1e293b" }} closeButton>
                 <Modal.Title>Add Bazar</Modal.Title>
               </Modal.Header>
-              <Modal.Body style={{ backgroundColor: "#0f172a" }}>
-                <Form>
+              <Modal.Body
+                style={{ backgroundColor: "#0f172a", borderRadius: "5px" }}
+              >
+                <Form noValidate validated={validated} onSubmit={handleSubmit}>
                   <Form.Group
                     className="mb-3"
                     controlId="exampleForm.ControlInput1"
@@ -48,8 +68,8 @@ const BazarList = () => {
                     <Form.Control
                       type="date"
                       placeholder="Enter bazar date"
-                      autoFocus
-                      value="0"
+                      name="date"
+                      onChange={handleOnChange}
                     />
                   </Form.Group>
                   <Form.Group
@@ -57,11 +77,20 @@ const BazarList = () => {
                     controlId="exampleForm.ControlInput1"
                   >
                     <Form.Label>Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter bazar member name"
-                      autoFocus
-                    />
+                    <Form.Select name="name" onChange={handleOnChange}>
+                      <option style={{ backgroundColor: "#1e293b" }}>
+                        Open this select menu
+                      </option>
+                      <option style={{ backgroundColor: "#1e293b" }} value="1">
+                        One
+                      </option>
+                      <option style={{ backgroundColor: "#1e293b" }} value="2">
+                        Two
+                      </option>
+                      <option style={{ backgroundColor: "#1e293b" }} value="3">
+                        Three
+                      </option>
+                    </Form.Select>
                   </Form.Group>
                   <Form.Group
                     className="mb-3"
@@ -71,7 +100,8 @@ const BazarList = () => {
                     <Form.Control
                       type="number"
                       placeholder="Enter bazar amount"
-                      autoFocus
+                      name="amount"
+                      onChange={handleOnChange}
                     />
                   </Form.Group>
                   <Form.Group
@@ -82,8 +112,8 @@ const BazarList = () => {
                     <Form.Control
                       type="number"
                       placeholder="Enter given amount"
-                      autoFocus
-                      value="0"
+                      name="given_amount"
+                      onChange={handleOnChange}
                     />
                   </Form.Group>
                   <Form.Group
@@ -94,20 +124,25 @@ const BazarList = () => {
                     <Form.Control
                       type="number"
                       placeholder="Enter return amount"
-                      autoFocus
-                      value="0"
+                      name="return_amount"
+                      onChange={handleOnChange}
                     />
                   </Form.Group>
+
+                  <div className="mt-3 d-flex justify-content-end">
+                    <Button
+                      className="me-3"
+                      variant="secondary"
+                      onClick={handleAddBazarClose}
+                    >
+                      Close
+                    </Button>
+                    <Button type="submit" variant="primary">
+                      Add Bazar
+                    </Button>
+                  </div>
                 </Form>
               </Modal.Body>
-              <Modal.Footer style={{ backgroundColor: "#1e293b" }}>
-                <Button variant="secondary" onClick={handleAddBazarClose}>
-                  Close
-                </Button>
-                <Button variant="primary" onClick={handleAddBazarClose}>
-                  Save Changes
-                </Button>
-              </Modal.Footer>
             </Modal>
           </span>
         </OverlayTrigger>

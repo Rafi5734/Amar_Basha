@@ -349,14 +349,6 @@ function App() {
                         Deposit-List
                       </Link>
                     </NavDropdown.Item>
-                    <NavDropdown.Item>
-                      <Link
-                        to="/update_deposit_list"
-                        className="me-5 text-white text-decoration-none"
-                      >
-                        Update Deposit-List
-                      </Link>
-                    </NavDropdown.Item>
                   </NavDropdown>
                   <Dropdown
                     className="mb-2 me-5"
@@ -579,14 +571,14 @@ function App() {
                         Deposit-List
                       </Link>
                     </NavDropdown.Item>
-                    <NavDropdown.Item>
+                    {/* <NavDropdown.Item>
                       <Link
                         to="/update_deposit_list"
                         className="me-5 text-white text-decoration-none"
                       >
                         Update Deposit-List
                       </Link>
-                    </NavDropdown.Item>
+                    </NavDropdown.Item> */}
                   </NavDropdown>
                   <Dropdown
                     className="mb-2 me-5"
