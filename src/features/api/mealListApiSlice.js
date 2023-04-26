@@ -18,6 +18,7 @@ export const mealListApiSlice = createApi({
       }),
       invalidatesTags: ["meal_list"],
     }),
+
     getMealList: builder.query({
       query: (pageNumber) => `/meal_list?page=${pageNumber}&limit=31`,
       providesTags: ["meal_list"],

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../assets/global.css";
 import {
   Button,
@@ -10,17 +10,34 @@ import {
 } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
+import { useGetUsersQuery } from "../../features/api/logInApiSlice";
+import {
+  useAddbazarMutation,
+  useGetBazarListQuery,
+} from "../../features/api/bazarListApiSlice";
+import { Link } from "react-router-dom";
 const BazarList = () => {
+  let count = 1;
   const [show, setShow] = useState(false);
   const [validated, setValidated] = useState(false);
   const [addBazar, setAddBazar] = useState(false);
   const [bazarAdd, setBazarAdd] = useState();
+  const [everyUser, setEveryUser] = useState([]);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const { data: allUser } = useGetUsersQuery();
+  const [addbazar, { isSuccess }] = useAddbazarMutation();
+  const { data: allBazarList, isFetching } = useGetBazarListQuery();
+
+  // console.log(allBazarList);
 
   const handleAddBazarClose = () => setAddBazar(false);
   const handleAddBazarShow = () => setAddBazar(true);
+
+  useEffect(() => {
+    setEveryUser(allUser?.map((user) => user?.userName));
+  }, [allUser]);
+
+  // console.log(everyUser);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -30,8 +47,8 @@ const BazarList = () => {
     } else {
       setValidated(true);
     }
-
-    console.log(bazarAdd);
+    addbazar(bazarAdd);
+    // console.log(bazarAdd);
   };
 
   const handleOnChange = (e) => {
@@ -79,17 +96,16 @@ const BazarList = () => {
                     <Form.Label>Name</Form.Label>
                     <Form.Select name="name" onChange={handleOnChange}>
                       <option style={{ backgroundColor: "#1e293b" }}>
-                        Open this select menu
+                        Select a member
                       </option>
-                      <option style={{ backgroundColor: "#1e293b" }} value="1">
-                        One
-                      </option>
-                      <option style={{ backgroundColor: "#1e293b" }} value="2">
-                        Two
-                      </option>
-                      <option style={{ backgroundColor: "#1e293b" }} value="3">
-                        Three
-                      </option>
+                      {everyUser?.map((name) => (
+                        <option
+                          style={{ backgroundColor: "#1e293b" }}
+                          value={name}
+                        >
+                          {name}
+                        </option>
+                      ))}
                     </Form.Select>
                   </Form.Group>
                   <Form.Group
@@ -137,7 +153,11 @@ const BazarList = () => {
                     >
                       Close
                     </Button>
-                    <Button type="submit" variant="primary">
+                    <Button
+                      onClick={handleAddBazarClose}
+                      type="submit"
+                      variant="primary"
+                    >
                       Add Bazar
                     </Button>
                   </div>
@@ -161,410 +181,30 @@ const BazarList = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>4/4/2023</td>
-              <td>Mark</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>500</td>
-              <td className="d-flex flex-row">
-                <OverlayTrigger
-                  className=""
-                  overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
-                >
-                  <span className="d-inline-block me-2">
-                    <Button onClick={handleShow}>
-                      <i className="fa-solid fa-pen-to-square"></i>
-                    </Button>
-
-                    <Modal className="w-100" show={show} onHide={handleClose}>
-                      <Modal.Header
-                        style={{ backgroundColor: "#1e293b" }}
-                        closeButton
-                      >
-                        <Modal.Title>Update Bazar List</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body style={{ backgroundColor: "#0f172a" }}>
-                        <Form>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Date</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter bazar time"
-                              autoFocus
-                              value="4/4/2023"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter bazar member name"
-                              autoFocus
-                              value="Mark"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Amount</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter bazar amount"
-                              autoFocus
-                              value="1000"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Given</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter Given Taka"
-                              autoFocus
-                              value="1000"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Return</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter return Taka"
-                              autoFocus
-                              value="500"
-                            />
-                          </Form.Group>
-                        </Form>
-                      </Modal.Body>
-                      <Modal.Footer style={{ backgroundColor: "#1e293b" }}>
-                        <Button variant="secondary" onClick={handleClose}>
-                          Close
+            {allBazarList?.map((bazar) => (
+              <tr key={bazar?._id}>
+                <td>{count++}</td>
+                <td>{bazar?.date}</td>
+                <td>{bazar?.name}</td>
+                <td>{bazar?.amount}</td>
+                <td>{bazar?.given_amount}</td>
+                <td>{bazar?.return_amount}</td>
+                <td className="d-flex flex-row">
+                  <OverlayTrigger
+                    className=""
+                    overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
+                  >
+                    <span className="d-inline-block me-2">
+                      <Link to={`/update_bazar_list/${bazar?._id}`}>
+                        <Button>
+                          <i className="fa-solid fa-pen-to-square"></i>
                         </Button>
-                        <Button variant="primary" onClick={handleClose}>
-                          Save Changes
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
-                  </span>
-                </OverlayTrigger>
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>4/4/2023</td>
-              <td>Mark</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>500</td>
-              <td className="d-flex flex-row">
-                <OverlayTrigger
-                  className=""
-                  overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
-                >
-                  <span className="d-inline-block me-2">
-                    <Button onClick={handleShow}>
-                      <i className="fa-solid fa-pen-to-square"></i>
-                    </Button>
-
-                    <Modal className="w-100" show={show} onHide={handleClose}>
-                      <Modal.Header
-                        style={{ backgroundColor: "#1e293b" }}
-                        closeButton
-                      >
-                        <Modal.Title>Update Bazar List</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body style={{ backgroundColor: "#0f172a" }}>
-                        <Form>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Date</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter bazar time"
-                              autoFocus
-                              value="4/4/2023"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter bazar member name"
-                              autoFocus
-                              value="Mark"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Amount</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter bazar amount"
-                              autoFocus
-                              value="1000"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Given</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter Given Taka"
-                              autoFocus
-                              value="1000"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Return</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter return Taka"
-                              autoFocus
-                              value="500"
-                            />
-                          </Form.Group>
-                        </Form>
-                      </Modal.Body>
-                      <Modal.Footer style={{ backgroundColor: "#1e293b" }}>
-                        <Button variant="secondary" onClick={handleClose}>
-                          Close
-                        </Button>
-                        <Button variant="primary" onClick={handleClose}>
-                          Save Changes
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
-                  </span>
-                </OverlayTrigger>
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>4/4/2023</td>
-              <td>Mark</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>500</td>
-              <td className="d-flex flex-row">
-                <OverlayTrigger
-                  className=""
-                  overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
-                >
-                  <span className="d-inline-block me-2">
-                    <Button onClick={handleShow}>
-                      <i className="fa-solid fa-pen-to-square"></i>
-                    </Button>
-
-                    <Modal className="w-100" show={show} onHide={handleClose}>
-                      <Modal.Header
-                        style={{ backgroundColor: "#1e293b" }}
-                        closeButton
-                      >
-                        <Modal.Title>Update Bazar List</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body style={{ backgroundColor: "#0f172a" }}>
-                        <Form>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Date</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter bazar time"
-                              autoFocus
-                              value="4/4/2023"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter bazar member name"
-                              autoFocus
-                              value="Mark"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Amount</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter bazar amount"
-                              autoFocus
-                              value="1000"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Given</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter Given Taka"
-                              autoFocus
-                              value="1000"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Return</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter return Taka"
-                              autoFocus
-                              value="500"
-                            />
-                          </Form.Group>
-                        </Form>
-                      </Modal.Body>
-                      <Modal.Footer style={{ backgroundColor: "#1e293b" }}>
-                        <Button variant="secondary" onClick={handleClose}>
-                          Close
-                        </Button>
-                        <Button variant="primary" onClick={handleClose}>
-                          Save Changes
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
-                  </span>
-                </OverlayTrigger>
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>4/4/2023</td>
-              <td>Mark</td>
-              <td>10000</td>
-              <td>1000</td>
-              <td>500</td>
-              <td className="d-flex flex-row">
-                <OverlayTrigger
-                  className=""
-                  overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
-                >
-                  <span className="d-inline-block me-2">
-                    <Button onClick={handleShow}>
-                      <i className="fa-solid fa-pen-to-square"></i>
-                    </Button>
-
-                    <Modal className="w-100" show={show} onHide={handleClose}>
-                      <Modal.Header
-                        style={{ backgroundColor: "#1e293b" }}
-                        closeButton
-                      >
-                        <Modal.Title>Update Bazar List</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body style={{ backgroundColor: "#0f172a" }}>
-                        <Form>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Date</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter bazar time"
-                              autoFocus
-                              value="4/4/2023"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter bazar member name"
-                              autoFocus
-                              value="Mark"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Amount</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter bazar amount"
-                              autoFocus
-                              value="1000"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Given</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter Given Taka"
-                              autoFocus
-                              value="1000"
-                            />
-                          </Form.Group>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="exampleForm.ControlInput1"
-                          >
-                            <Form.Label>Return</Form.Label>
-                            <Form.Control
-                              type="text"
-                              placeholder="Enter return Taka"
-                              autoFocus
-                              value="500"
-                            />
-                          </Form.Group>
-                        </Form>
-                      </Modal.Body>
-                      <Modal.Footer style={{ backgroundColor: "#1e293b" }}>
-                        <Button variant="secondary" onClick={handleClose}>
-                          Close
-                        </Button>
-                        <Button variant="primary" onClick={handleClose}>
-                          Save Changes
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
-                  </span>
-                </OverlayTrigger>
-              </td>
-            </tr>
+                      </Link>
+                    </span>
+                  </OverlayTrigger>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
         <Pagination>

@@ -11,7 +11,6 @@ import MealList from "./Components/MealList/MealList";
 import BazarList from "./Components/BazarList/BazarList";
 import DepositList from "./Components/DepositList/DepositList";
 import UpdateMealList from "./Components/MealList/UpdateMealList";
-import UpdateBazarList from "./Components/BazarList/updateBazarList";
 import UpdateDepositList from "./Components/DepositList/UpdateDeposit";
 import { Badge, Button, Dropdown } from "react-bootstrap";
 import Notification from "./Pages/Notifications/Notification";
@@ -24,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import PrivateComponent from "./Layout/PrivateComponent";
 import UpdateMember from "./Components/Members/UpdateMember/UpdateMember";
 import AddNewMeal from "./Components/MealList/AddNewMeal";
+import UpdateBazarList from "./Components/BazarList/UpdateBazarList/UpdateBazarList";
 // import { useGetUsersQuery } from "./features/api/logInApiSlice";
 
 function App() {
@@ -772,7 +772,7 @@ function App() {
           ></Route>
           <Route path="/bazar_list" element={<BazarList />}></Route>
           <Route
-            path="/update_bazar_list"
+            path="/update_bazar_list/:id"
             element={<UpdateBazarList />}
           ></Route>
           <Route path="/deposit_list" element={<DepositList />}></Route>

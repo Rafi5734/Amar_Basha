@@ -154,7 +154,7 @@ const DepositList = () => {
         <Table striped bordered hover variant="dark">
           <thead>
             <tr>
-              <th>Month</th>
+              <th>Date&Month</th>
               <th>Name</th>
               <th>Deposit Amount</th>
               <th>Extra Amount</th>
@@ -164,7 +164,7 @@ const DepositList = () => {
           </thead>
           <tbody>
             <tr>
-              <td rowSpan={9}>March</td>
+              <td>4/26/2023</td>
               <td>Mark</td>
               <td>10000</td>
               <td>0</td>
@@ -175,7 +175,7 @@ const DepositList = () => {
                   overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
                 >
                   <span className="d-inline-block me-2">
-                    <Button onClick={handleShow}>
+                    <Button>
                       <i className="fa-solid fa-pen-to-square"></i>
                     </Button>
                   </span>
@@ -184,47 +184,8 @@ const DepositList = () => {
             </tr>
             <tr>
               <td>Total</td>
-              <td> = 23000</td>
-              <td>= 23000</td>
-              <td>= 23000</td>
               <td></td>
-            </tr>
-          </tbody>
-        </Table>
-        <Table striped bordered hover variant="dark">
-          <thead>
-            <tr>
-              <th>Month</th>
-              <th>Name</th>
-              <th>Deposit Amount</th>
-              <th>Extra Amount</th>
-              <th>Get Amount</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td rowSpan={9}>March</td>
-              <td>Mark</td>
-              <td>10000</td>
-              <td>0</td>
-              <td>429</td>
-              <td className="d-flex flex-row">
-                <OverlayTrigger
-                  className=""
-                  overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
-                >
-                  <span className="d-inline-block me-2">
-                    <Button onClick={handleShow}>
-                      <i className="fa-solid fa-pen-to-square"></i>
-                    </Button>
-                  </span>
-                </OverlayTrigger>
-              </td>
-            </tr>
-            <tr>
-              <td>Total</td>
-              <td> = 23000</td>
+              <td>= 23000</td>
               <td>= 23000</td>
               <td>= 23000</td>
               <td></td>
