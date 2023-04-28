@@ -28,7 +28,16 @@ export const bazarListApiSlice = createApi({
       query: () => "/bazar_list",
       providesTags: ["bazar_list"],
     }),
+
+    getSingleBazar: builder.query({
+      query: (id) => `/bazar_list/${id}`,
+      providesTags: (result, error, arg) => [{ type: "bazar_list", id: arg }],
+    }),
   }),
 });
 
-export const { useAddbazarMutation, useGetBazarListQuery } = bazarListApiSlice;
+export const {
+  useAddbazarMutation,
+  useGetBazarListQuery,
+  useGetSingleBazarQuery,
+} = bazarListApiSlice;

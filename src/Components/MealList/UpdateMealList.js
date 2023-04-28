@@ -62,7 +62,7 @@ const UpdateMealList = () => {
       <div className="bg_primary add_member_form">
         <Container className="mb-5">
           <div>
-            <h1 className="text-center pt-3 pb-3">Update Meal Info - date</h1>
+            <h1 className="text-center pt-3 pb-3">Update Meal Info</h1>
           </div>
           {isFetching ? (
             <>
