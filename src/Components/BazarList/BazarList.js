@@ -28,7 +28,7 @@ const BazarList = () => {
   const [addbazar, { isSuccess }] = useAddbazarMutation();
   const { data: allBazarList, isFetching } = useGetBazarListQuery();
 
-  // console.log(allBazarList);
+  console.log(allBazarList);
 
   const handleAddBazarClose = () => setAddBazar(false);
   const handleAddBazarShow = () => setAddBazar(true);

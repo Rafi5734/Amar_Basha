@@ -4,11 +4,16 @@ import { useParams } from "react-router-dom";
 import { useGetSingleBazarQuery } from "../../../features/api/bazarListApiSlice";
 export default function UpdateBazarList() {
   const { id } = useParams();
-  const [validated, setValidated] = useState(false);
-
   const { data: singleBazar, isFetching } = useGetSingleBazarQuery(id);
 
-  console.log(singleBazar);
+  const [validated, setValidated] = useState(false);
+  const [formValues, setFormValues] = useState({
+    date: singleBazar?.date,
+    name: singleBazar?.name,
+    amount: singleBazar?.amount,
+    given_amount: singleBazar?.given_amount,
+    return_amount: singleBazar?.return_amount,
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -18,6 +23,8 @@ export default function UpdateBazarList() {
     }
     setValidated(true);
 
+    console.log(formValues);
+
     // updateSingleMeal({ id, allMeal: formValues });
 
     // navigate("/meal_list");
@@ -25,10 +32,13 @@ export default function UpdateBazarList() {
     // console.log({ id, allMeal: formValues });
   };
 
-  const handleOnChange = (name, value) => {
-    // const changingValue = { ...formValues };
-    // changingValue[name] = value;
-    // setFormValues(changingValue);
+  const onChange = (e) => {
+    // setFormValues({
+    //   ...formValues,
+    //   e.target.name: e.target.value,
+    // });
+
+    console.log(e.target.name, e.target.value);
   };
   return (
     <div>
@@ -50,14 +60,96 @@ export default function UpdateBazarList() {
                 md="4"
                 controlId="validationCustom01"
               >
+                <Form.Label>Date</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="Enter bazar date"
+                  name={singleBazar?.date}
+                  defaultValue={singleBazar?.date}
+                  onChange={(e) => onChange(e)}
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Please choose a username.
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group
+                className="mb-3"
+                as={Col}
+                md="4"
+                controlId="validationCustom01"
+              >
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                   required
                   type="text"
-                  placeholder="Enter member name"
-                  //   name={member?.name}
-                  //   defaultValue={member?.value}
-                  //   onChange={(e) => handleOnChange(member?.name, e.target.value)}
+                  placeholder="Enter bazar member name"
+                  name={singleBazar?.name}
+                  defaultValue={singleBazar?.name}
+                  onChange={(e) => onChange(e)}
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Please choose a username.
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group
+                className="mb-3"
+                as={Col}
+                md="4"
+                controlId="validationCustom01"
+              >
+                <Form.Label>Amount</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="Enter bazar member amount"
+                  name={singleBazar?.amount}
+                  defaultValue={singleBazar?.amount}
+                  onChange={(e) => onChange(e)}
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Please choose a username.
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Row>
+            <Row className="mb-3">
+              <Form.Group
+                className="mb-3"
+                as={Col}
+                md="4"
+                controlId="validationCustom01"
+              >
+                <Form.Label>Given amount</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="Enter bazar date"
+                  name={singleBazar?.given_amount}
+                  defaultValue={singleBazar?.given_amount}
+                  onChange={(e) => onChange(e)}
+                />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Please choose a username.
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group
+                className="mb-3"
+                as={Col}
+                md="4"
+                controlId="validationCustom01"
+              >
+                <Form.Label>Return amount</Form.Label>
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="Enter bazar member name"
+                  name={singleBazar?.return_amount}
+                  defaultValue={singleBazar?.return_amount}
+                  onChange={(e) => onChange(e)}
                 />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 <Form.Control.Feedback type="invalid">

@@ -38,7 +38,7 @@ function App() {
       setRole(convertData.category);
       setName(convertData.userName);
     }
-  }, [convertData.category, convertData.userName, logInUser]);
+  }, [convertData?.category, convertData?.userName, logInUser]);
 
   const handleLogout = () => {
     localStorage.removeItem("login_user");
