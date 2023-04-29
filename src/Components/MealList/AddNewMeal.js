@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Row,
   Form,
-  InputGroup,
   Button,
   Col,
   Placeholder,
@@ -15,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 export default function AddNewMeal() {
   const navigate = useNavigate();
   const [validated, setValidated] = useState(false);
-  const [addMeal, { isFetching, isError }] = useAddMealMutation();
+  const [addMeal] = useAddMealMutation();
   const { data: allUsers, isLoading } = useGetUsersQuery();
   const [formValues, setFormValues] = useState();
 

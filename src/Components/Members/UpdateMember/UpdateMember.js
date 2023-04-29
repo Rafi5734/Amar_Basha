@@ -17,11 +17,7 @@ import {
 export default function UpdateMember() {
   const navigate = useNavigate();
   let { id } = useParams();
-  const {
-    data: singleUserData,
-    isFetching,
-    isError,
-  } = useGetSingleUserQuery(id);
+  const { data: singleUserData, isFetching } = useGetSingleUserQuery(id);
   const [validated, setValidated] = useState(false);
   const [userName, setUserName] = useState(singleUserData?.userName);
   const [userEmail, setUserEmail] = useState(singleUserData?.email);
@@ -35,16 +31,6 @@ export default function UpdateMember() {
 
   const [updateSingleUser] = useUpdateSingleUserMutation();
   // console.log(updateSingleUser, isLoading);
-
-  const updateData = {
-    userName: userName,
-    email: userEmail,
-    phone: phoneNumber,
-    status: userStatus,
-    category: userCategory,
-    working_place: userWorkPlace,
-    password: password,
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();

@@ -3,10 +3,8 @@ import "./member.css";
 import {
   Button,
   Container,
-  Modal,
   OverlayTrigger,
   Tooltip,
-  Form,
   Dropdown,
   Spinner,
 } from "react-bootstrap";
@@ -20,7 +18,7 @@ import {
 import Placeholder from "react-bootstrap/Placeholder";
 
 const Members = () => {
-  const { data: allUsers, isFetching, isError } = useGetUsersQuery();
+  const { data: allUsers, isFetching } = useGetUsersQuery();
 
   const [deleteUser] = useDeleteUserMutation();
   const [makeRole] = useMakeRoleMutation();
@@ -32,10 +30,10 @@ const Members = () => {
 
   useEffect(() => {
     if (logInUser) {
-      setRole(convertData.category);
+      setRole(convertData?.category);
     }
-    console.log(allUsers);
-  }, []);
+    // console.log(allUsers);
+  }, [logInUser, convertData?.category]);
 
   // let content = null;
   let count = 1;

@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 const AddMember = () => {
   const navigate = useNavigate();
-  const [addUser, data, isLoading, isError] = useAddUserMutation();
+  const [addUser, isLoading] = useAddUserMutation();
   // console.log(data);
   const [validated, setValidated] = useState(false);
   const [userName, setUserName] = useState("");

@@ -14,7 +14,7 @@ const Login = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { data: allUser, isLoading, isError } = useGetUsersQuery();
+  const { data: allUser, isLoading } = useGetUsersQuery();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -27,9 +27,9 @@ const Login = () => {
       if (filterUser.length > 0) {
         filterUser.map((i) => {
           localStorage.setItem("login_user", JSON.stringify(i));
-          console.log(i);
           navigate("/");
           window.location.reload();
+          return i;
         });
       }
     }
