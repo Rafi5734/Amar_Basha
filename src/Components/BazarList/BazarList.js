@@ -7,6 +7,7 @@ import {
   OverlayTrigger,
   Tooltip,
   Form,
+  Placeholder,
 } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
@@ -18,17 +19,16 @@ import {
 import { Link } from "react-router-dom";
 const BazarList = () => {
   let count = 1;
-  const [show, setShow] = useState(false);
   const [validated, setValidated] = useState(false);
   const [addBazar, setAddBazar] = useState(false);
   const [bazarAdd, setBazarAdd] = useState();
   const [everyUser, setEveryUser] = useState([]);
 
   const { data: allUser } = useGetUsersQuery();
-  const [addbazar, { isSuccess }] = useAddbazarMutation();
+  const [addbazar] = useAddbazarMutation();
   const { data: allBazarList, isFetching } = useGetBazarListQuery();
 
-  console.log(allBazarList);
+  // console.log(allBazarList);
 
   const handleAddBazarClose = () => setAddBazar(false);
   const handleAddBazarShow = () => setAddBazar(true);
@@ -167,57 +167,126 @@ const BazarList = () => {
           </span>
         </OverlayTrigger>
       </div>
-      <Container fluid className="overflow-auto">
-        <Table striped bordered hover variant="dark">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Date</th>
-              <th>Name</th>
-              <th>Amount</th>
-              <th>Given</th>
-              <th>Return</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allBazarList?.map((bazar) => (
-              <tr key={bazar?._id}>
-                <td>{count++}</td>
-                <td>{bazar?.date}</td>
-                <td>{bazar?.name}</td>
-                <td>{bazar?.amount}</td>
-                <td>{bazar?.given_amount}</td>
-                <td>{bazar?.return_amount}</td>
-                <td className="d-flex flex-row">
-                  <OverlayTrigger
-                    className=""
-                    overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
-                  >
-                    <span className="d-inline-block me-2">
-                      <Link to={`/update_bazar_list/${bazar?._id}`}>
-                        <Button>
-                          <i className="fa-solid fa-pen-to-square"></i>
-                        </Button>
-                      </Link>
-                    </span>
-                  </OverlayTrigger>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-        <Pagination>
-          <Pagination.Item>Prev</Pagination.Item>
-          <Pagination.Item>{1}</Pagination.Item>
-          <Pagination.Item>{2}</Pagination.Item>
-          <Pagination.Item>{3}</Pagination.Item>
-          <Pagination.Item active>{4}</Pagination.Item>
-          <Pagination.Item>{5}</Pagination.Item>
-          <Pagination.Item>{6}</Pagination.Item>
-          <Pagination.Item>Next</Pagination.Item>
-        </Pagination>
-      </Container>
+      {isFetching ? (
+        <>
+          <>
+            <Placeholder as="p" animation="glow">
+              <Placeholder
+                style={{
+                  width: "100%",
+                  height: "100px",
+                  borderRadius: "5px",
+                }}
+                xs={12}
+              />
+            </Placeholder>
+            <Placeholder as="p" animation="glow">
+              <Placeholder
+                style={{
+                  width: "100%",
+                  height: "100px",
+                  borderRadius: "5px",
+                }}
+                xs={12}
+              />
+            </Placeholder>
+            <Placeholder as="p" animation="glow">
+              <Placeholder
+                style={{
+                  width: "100%",
+                  height: "100px",
+                  borderRadius: "5px",
+                }}
+                xs={12}
+              />
+            </Placeholder>
+            <Placeholder as="p" animation="glow">
+              <Placeholder
+                style={{
+                  width: "100%",
+                  height: "100px",
+                  borderRadius: "5px",
+                }}
+                xs={12}
+              />
+            </Placeholder>
+            <Placeholder as="p" animation="glow">
+              <Placeholder
+                style={{
+                  width: "100%",
+                  height: "100px",
+                  borderRadius: "5px",
+                }}
+                xs={12}
+              />
+            </Placeholder>
+            <Placeholder as="p" animation="glow">
+              <Placeholder
+                style={{
+                  width: "100%",
+                  height: "100px",
+                  borderRadius: "5px",
+                }}
+                xs={12}
+              />
+            </Placeholder>
+          </>
+        </>
+      ) : (
+        <>
+          <Container fluid className="overflow-auto">
+            <Table striped bordered hover variant="dark">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Date</th>
+                  <th>Name</th>
+                  <th>Amount</th>
+                  <th>Given</th>
+                  <th>Return</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allBazarList?.map((bazar) => (
+                  <tr key={bazar?._id}>
+                    <td>{count++}</td>
+                    <td>{bazar?.date}</td>
+                    <td>{bazar?.name}</td>
+                    <td>{bazar?.amount}</td>
+                    <td>{bazar?.given_amount}</td>
+                    <td>{bazar?.return_amount}</td>
+                    <td className="d-flex flex-row">
+                      <OverlayTrigger
+                        className=""
+                        overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
+                      >
+                        <span className="d-inline-block me-2">
+                          <Link to={`/update_bazar_list/${bazar?._id}`}>
+                            <Button>
+                              <i className="fa-solid fa-pen-to-square"></i>
+                            </Button>
+                          </Link>
+                        </span>
+                      </OverlayTrigger>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <Pagination>
+              <Pagination.Item>Prev</Pagination.Item>
+              <Pagination.Item>{1}</Pagination.Item>
+              <Pagination.Item>{2}</Pagination.Item>
+              <Pagination.Item>{3}</Pagination.Item>
+              <Pagination.Item active>{4}</Pagination.Item>
+              <Pagination.Item>{5}</Pagination.Item>
+              <Pagination.Item>{6}</Pagination.Item>
+              <Pagination.Item>Next</Pagination.Item>
+            </Pagination>
+          </Container>
+        </>
+      )}
     </div>
   );
 };

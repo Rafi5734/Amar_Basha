@@ -3,7 +3,6 @@ import {
   Button,
   Container,
   OverlayTrigger,
-  Pagination,
   Placeholder,
   Tooltip,
 } from "react-bootstrap";
@@ -19,7 +18,6 @@ import ReactPaginate from "react-paginate";
 const MealList = () => {
   const [allMemberMeal, setAllMemberMeal] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
-  const [pageCount, setPageCount] = useState(0);
   var count = 1;
   const { data: allMealList, isFetching } = useGetMealListQuery(pageNumber);
   const [deleteMealList] = useDeleteMealListMutation();

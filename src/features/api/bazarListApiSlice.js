@@ -33,6 +33,15 @@ export const bazarListApiSlice = createApi({
       query: (id) => `/bazar_list/${id}`,
       providesTags: (result, error, arg) => [{ type: "bazar_list", id: arg }],
     }),
+
+    updateSingleBazar: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/bazar_list/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["bazar_list"],
+    }),
   }),
 });
 
@@ -40,4 +49,5 @@ export const {
   useAddbazarMutation,
   useGetBazarListQuery,
   useGetSingleBazarQuery,
+  useUpdateSingleBazarMutation,
 } = bazarListApiSlice;

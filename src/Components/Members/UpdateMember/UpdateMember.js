@@ -67,19 +67,6 @@ export default function UpdateMember() {
         password: password,
       },
     });
-
-    // console.log({
-    //   id,
-    //   data: {
-    //     userName: userName,
-    //     email: userEmail,
-    //     phone: phoneNumber,
-    //     status: userStatus,
-    //     category: userCategory,
-    //     working_place: userWorkPlace,
-    //     password: password,
-    //   },
-    // });
     navigate("/members");
     window.location.reload();
 
