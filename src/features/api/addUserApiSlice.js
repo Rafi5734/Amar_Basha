@@ -4,6 +4,7 @@ export const addUserApiSlice = createApi({
   reducerPath: "addUser",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8000",
+    // baseUrl: `${process.env.REACT_APP_MESS_APP_BASE_URL}`,
   }),
   tagTypes: ["add_user"],
   endpoints: (builder) => ({
