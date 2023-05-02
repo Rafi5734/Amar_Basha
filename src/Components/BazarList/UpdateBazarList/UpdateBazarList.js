@@ -54,68 +54,66 @@ export default function UpdateBazarList() {
           </div>
           {isFetching ? (
             <>
-              <>
-                <Placeholder as="p" animation="glow">
-                  <Placeholder
-                    style={{
-                      width: "100%",
-                      height: "100px",
-                      borderRadius: "5px",
-                    }}
-                    xs={12}
-                  />
-                </Placeholder>
-                <Placeholder as="p" animation="glow">
-                  <Placeholder
-                    style={{
-                      width: "100%",
-                      height: "100px",
-                      borderRadius: "5px",
-                    }}
-                    xs={12}
-                  />
-                </Placeholder>
-                <Placeholder as="p" animation="glow">
-                  <Placeholder
-                    style={{
-                      width: "100%",
-                      height: "100px",
-                      borderRadius: "5px",
-                    }}
-                    xs={12}
-                  />
-                </Placeholder>
-                <Placeholder as="p" animation="glow">
-                  <Placeholder
-                    style={{
-                      width: "100%",
-                      height: "100px",
-                      borderRadius: "5px",
-                    }}
-                    xs={12}
-                  />
-                </Placeholder>
-                <Placeholder as="p" animation="glow">
-                  <Placeholder
-                    style={{
-                      width: "100%",
-                      height: "100px",
-                      borderRadius: "5px",
-                    }}
-                    xs={12}
-                  />
-                </Placeholder>
-                <Placeholder as="p" animation="glow">
-                  <Placeholder
-                    style={{
-                      width: "100%",
-                      height: "100px",
-                      borderRadius: "5px",
-                    }}
-                    xs={12}
-                  />
-                </Placeholder>
-              </>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
             </>
           ) : (
             <>

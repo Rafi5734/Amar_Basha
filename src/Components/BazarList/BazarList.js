@@ -17,6 +17,8 @@ import {
   useGetBazarListQuery,
 } from "../../features/api/bazarListApiSlice";
 import { Link } from "react-router-dom";
+
+
 const BazarList = () => {
   let count = 1;
   const [validated, setValidated] = useState(false);
@@ -25,8 +27,8 @@ const BazarList = () => {
   const [everyUser, setEveryUser] = useState([]);
 
   const { data: allUser } = useGetUsersQuery();
-  const [addbazar] = useAddbazarMutation();
-  const { data: allBazarList, isFetching } = useGetBazarListQuery();
+  // const [addbazar] = useAddbazarMutation();
+  // const { data: allBazarList, isFetching } = useGetBazarListQuery();
 
   // console.log(allBazarList);
 
@@ -47,7 +49,7 @@ const BazarList = () => {
     } else {
       setValidated(true);
     }
-    addbazar(bazarAdd);
+    // addbazar(bazarAdd);
     // console.log(bazarAdd);
   };
 
@@ -94,13 +96,14 @@ const BazarList = () => {
                     controlId="exampleForm.ControlInput1"
                   >
                     <Form.Label>Name</Form.Label>
-                    <Form.Select name="name" onChange={handleOnChange}>
+                    <Form.Select onChange={handleOnChange}>
                       <option style={{ backgroundColor: "#1e293b" }}>
                         Select a member
                       </option>
                       {everyUser?.map((name) => (
                         <option
                           style={{ backgroundColor: "#1e293b" }}
+                          name={name}
                           value={name}
                         >
                           {name}
@@ -167,75 +170,9 @@ const BazarList = () => {
           </span>
         </OverlayTrigger>
       </div>
-      {isFetching ? (
-        <>
-          <>
-            <Placeholder as="p" animation="glow">
-              <Placeholder
-                style={{
-                  width: "100%",
-                  height: "100px",
-                  borderRadius: "5px",
-                }}
-                xs={12}
-              />
-            </Placeholder>
-            <Placeholder as="p" animation="glow">
-              <Placeholder
-                style={{
-                  width: "100%",
-                  height: "100px",
-                  borderRadius: "5px",
-                }}
-                xs={12}
-              />
-            </Placeholder>
-            <Placeholder as="p" animation="glow">
-              <Placeholder
-                style={{
-                  width: "100%",
-                  height: "100px",
-                  borderRadius: "5px",
-                }}
-                xs={12}
-              />
-            </Placeholder>
-            <Placeholder as="p" animation="glow">
-              <Placeholder
-                style={{
-                  width: "100%",
-                  height: "100px",
-                  borderRadius: "5px",
-                }}
-                xs={12}
-              />
-            </Placeholder>
-            <Placeholder as="p" animation="glow">
-              <Placeholder
-                style={{
-                  width: "100%",
-                  height: "100px",
-                  borderRadius: "5px",
-                }}
-                xs={12}
-              />
-            </Placeholder>
-            <Placeholder as="p" animation="glow">
-              <Placeholder
-                style={{
-                  width: "100%",
-                  height: "100px",
-                  borderRadius: "5px",
-                }}
-                xs={12}
-              />
-            </Placeholder>
-          </>
-        </>
-      ) : (
-        <>
-          <Container fluid className="overflow-auto">
-            <Table striped bordered hover variant="dark">
+
+      <Container fluid className="overflow-auto">
+        {/* <Table striped bordered hover variant="dark">
               <thead>
                 <tr>
                   <th>#</th>
@@ -273,20 +210,18 @@ const BazarList = () => {
                   </tr>
                 ))}
               </tbody>
-            </Table>
-            <Pagination>
-              <Pagination.Item>Prev</Pagination.Item>
-              <Pagination.Item>{1}</Pagination.Item>
-              <Pagination.Item>{2}</Pagination.Item>
-              <Pagination.Item>{3}</Pagination.Item>
-              <Pagination.Item active>{4}</Pagination.Item>
-              <Pagination.Item>{5}</Pagination.Item>
-              <Pagination.Item>{6}</Pagination.Item>
-              <Pagination.Item>Next</Pagination.Item>
-            </Pagination>
-          </Container>
-        </>
-      )}
+            </Table> */}
+        <Pagination>
+          <Pagination.Item>Prev</Pagination.Item>
+          <Pagination.Item>{1}</Pagination.Item>
+          <Pagination.Item>{2}</Pagination.Item>
+          <Pagination.Item>{3}</Pagination.Item>
+          <Pagination.Item active>{4}</Pagination.Item>
+          <Pagination.Item>{5}</Pagination.Item>
+          <Pagination.Item>{6}</Pagination.Item>
+          <Pagination.Item>Next</Pagination.Item>
+        </Pagination>
+      </Container>
     </div>
   );
 };
