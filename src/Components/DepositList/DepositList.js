@@ -7,6 +7,7 @@ import {
   Form,
   Modal,
   OverlayTrigger,
+  Placeholder,
   Row,
   Tooltip,
 } from "react-bootstrap";
@@ -19,7 +20,6 @@ import {
 } from "../../features/api/depositListApiSlice";
 import { useGetUsersQuery } from "../../features/api/logInApiSlice";
 import { Link } from "react-router-dom";
-// import { useGetBazarListQuery } from "../../features/api/bazarListApiSlice";
 const DepositList = () => {
   const [validated, setValidated] = useState(false);
   const [show, setShow] = useState(false);
@@ -28,7 +28,6 @@ const DepositList = () => {
   const { data: allUser } = useGetUsersQuery();
   const [addDeposit] = useAddDepositMutation();
   const { data: allDepositList, isFetching } = useGetDepositListQuery();
-  // const { data: allBazarList } = useGetBazarListQuery();
 
   // console.log(allDepositList);
 
@@ -174,52 +173,121 @@ const DepositList = () => {
       </div>
 
       <Container fluid className="overflow-auto">
-        <Table striped bordered hover variant="dark">
-          <thead>
-            <tr>
-              <th>Date&Month</th>
-              <th>Name</th>
-              <th>Deposit Amount</th>
-              <th>Extra Amount</th>
-              <th>Get Amount</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allDepositList?.map((deposit) => (
-              <tr>
-                <td>{deposit?.date}</td>
-                <td>{deposit?.name}</td>
-                <td>{deposit?.deposit_amount}</td>
-                <td>{deposit?.extra_amount}</td>
-                <td>{deposit?.get_amount}</td>
-                <td className="d-flex flex-row">
-                  <OverlayTrigger
-                    className=""
-                    overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
-                  >
-                    <span className="d-inline-block me-2">
-                      <Link to={`/update_deposit_list/${deposit?._id}`}>
-                        <Button>
-                          <i className="fa-solid fa-pen-to-square"></i>
-                        </Button>
-                      </Link>
-                    </span>
-                  </OverlayTrigger>
-                </td>
-              </tr>
-            ))}
+        {isFetching ? (
+          <>
+            <>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+            </>
+          </>
+        ) : (
+          <>
+            <Table striped bordered hover variant="dark">
+              <thead>
+                <tr>
+                  <th>Date&Month</th>
+                  <th>Name</th>
+                  <th>Deposit Amount</th>
+                  <th>Extra Amount</th>
+                  <th>Get Amount</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allDepositList?.map((deposit) => (
+                  <tr>
+                    <td>{deposit?.date}</td>
+                    <td>{deposit?.name}</td>
+                    <td>{deposit?.deposit_amount}</td>
+                    <td>{deposit?.extra_amount}</td>
+                    <td>{deposit?.get_amount}</td>
+                    <td className="d-flex flex-row">
+                      <OverlayTrigger
+                        className=""
+                        overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
+                      >
+                        <span className="d-inline-block me-2">
+                          <Link to={`/update_deposit_list/${deposit?._id}`}>
+                            <Button>
+                              <i className="fa-solid fa-pen-to-square"></i>
+                            </Button>
+                          </Link>
+                        </span>
+                      </OverlayTrigger>
+                    </td>
+                  </tr>
+                ))}
 
-            <tr>
-              <td>Total</td>
-              <td></td>
-              <td>= 23000</td>
-              <td>= 23000</td>
-              <td>= 23000</td>
-              <td></td>
-            </tr>
-          </tbody>
-        </Table>
+                <tr>
+                  <td>Total</td>
+                  <td></td>
+                  <td>= 23000</td>
+                  <td>= 23000</td>
+                  <td>= 23000</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </Table>
+          </>
+        )}
       </Container>
     </div>
   );
