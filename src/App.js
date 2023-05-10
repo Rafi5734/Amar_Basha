@@ -777,7 +777,7 @@ function App() {
           ></Route>
           <Route path="/deposit_list" element={<DepositList />}></Route>
           <Route
-            path="/update_deposit_list"
+            path="/update_deposit_list/:id"
             element={<UpdateDepositList />}
           ></Route>
           <Route path="/notification" element={<Notification />}></Route>

@@ -19,15 +19,15 @@ export const bazarListApiSlice = createApi({
       invalidatesTags: ["bazar_list"],
     }),
 
-    // getBazarList: builder.query({
-    //   query: (pageNumber) => `/meal_list?page=${pageNumber}&limit=31`,
-    //   providesTags: ["bazar_list"],
-    // }),
-
     getBazarList: builder.query({
       query: () => "/bazar_list",
       providesTags: ["bazar_list"],
     }),
+
+    // getBazarList: builder.query({
+    //   query: (pageNumber) => `/meal_list?page=${pageNumber}&limit=31`,
+    //   providesTags: ["bazar_list"],
+    // }),
 
     getSingleBazar: builder.query({
       query: (id) => `/bazar_list/${id}`,

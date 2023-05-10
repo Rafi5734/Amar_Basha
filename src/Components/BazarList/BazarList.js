@@ -17,27 +17,48 @@ import {
   useGetBazarListQuery,
 } from "../../features/api/bazarListApiSlice";
 import { Link } from "react-router-dom";
+
+
 const BazarList = () => {
   let count = 1;
   const [validated, setValidated] = useState(false);
   const [addBazar, setAddBazar] = useState(false);
-  const [bazarAdd, setBazarAdd] = useState();
+  const [bazarAdd, setBazarAdd] = useState({});
   const [everyUser, setEveryUser] = useState([]);
+  const [sumOfAmount, setSumOfAmount] = useState("");
+  const [sumOfGivenAmount, setSumOfGivenAmount] = useState("");
+  const [sumOfReturnAmount, setSumOfReturnAmount] = useState("");
 
   const { data: allUser } = useGetUsersQuery();
   const [addbazar] = useAddbazarMutation();
   const { data: allBazarList, isFetching } = useGetBazarListQuery();
-
-  // console.log(allBazarList);
 
   const handleAddBazarClose = () => setAddBazar(false);
   const handleAddBazarShow = () => setAddBazar(true);
 
   useEffect(() => {
     setEveryUser(allUser?.map((user) => user?.userName));
-  }, [allUser]);
 
-  // console.log(everyUser);
+    const sumOfAmount = allBazarList.reduce(
+      (sum, user) => sum + Number(user.amount),
+      0
+    );
+    setSumOfAmount(sumOfAmount);
+
+    const sumOfGivenAmount = allBazarList.reduce(
+      (sum, user) => sum + Number(user.given_amount),
+      0
+    );
+    setSumOfGivenAmount(sumOfGivenAmount);
+
+    const sumOfReturnAmount = allBazarList.reduce(
+      (sum, user) => sum + Number(user.return_amount),
+      0
+    );
+    setSumOfReturnAmount(sumOfReturnAmount);
+  }, [allUser, allBazarList]);
+
+  // console.log();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -167,8 +188,9 @@ const BazarList = () => {
           </span>
         </OverlayTrigger>
       </div>
-      {isFetching ? (
-        <>
+
+      <Container fluid className="overflow-auto">
+        {isFetching ? (
           <>
             <Placeholder as="p" animation="glow">
               <Placeholder
@@ -231,10 +253,8 @@ const BazarList = () => {
               />
             </Placeholder>
           </>
-        </>
-      ) : (
-        <>
-          <Container fluid className="overflow-auto">
+        ) : (
+          <>
             <Table striped bordered hover variant="dark">
               <thead>
                 <tr>
@@ -272,21 +292,32 @@ const BazarList = () => {
                     </td>
                   </tr>
                 ))}
+
+                <tr>
+                  <th scope="row">Total = </th>
+                  <td></td>
+                  <td></td>
+                  <td> = {sumOfAmount} </td>
+                  <td> = {sumOfGivenAmount} </td>
+                  <td> = {sumOfReturnAmount} </td>
+                  <td></td>
+                </tr>
               </tbody>
             </Table>
-            <Pagination>
-              <Pagination.Item>Prev</Pagination.Item>
-              <Pagination.Item>{1}</Pagination.Item>
-              <Pagination.Item>{2}</Pagination.Item>
-              <Pagination.Item>{3}</Pagination.Item>
-              <Pagination.Item active>{4}</Pagination.Item>
-              <Pagination.Item>{5}</Pagination.Item>
-              <Pagination.Item>{6}</Pagination.Item>
-              <Pagination.Item>Next</Pagination.Item>
-            </Pagination>
-          </Container>
-        </>
-      )}
+          </>
+        )}
+
+        <Pagination>
+          <Pagination.Item>Prev</Pagination.Item>
+          <Pagination.Item>{1}</Pagination.Item>
+          <Pagination.Item>{2}</Pagination.Item>
+          <Pagination.Item>{3}</Pagination.Item>
+          <Pagination.Item active>{4}</Pagination.Item>
+          <Pagination.Item>{5}</Pagination.Item>
+          <Pagination.Item>{6}</Pagination.Item>
+          <Pagination.Item>Next</Pagination.Item>
+        </Pagination>
+      </Container>
     </div>
   );
 };

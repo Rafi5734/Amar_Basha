@@ -22,7 +22,6 @@ const Members = () => {
 
   const [deleteUser] = useDeleteUserMutation();
   const [makeRole] = useMakeRoleMutation();
-  // console.log(isLoading, isFetching);
 
   const [role, setRole] = useState("");
   const logInUser = localStorage.getItem("login_user");

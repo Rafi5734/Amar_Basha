@@ -7,27 +7,48 @@ import {
   Form,
   Modal,
   OverlayTrigger,
+  Placeholder,
   Row,
   Tooltip,
 } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import { useState } from "react";
 import "./depositList.css";
+import {
+  useAddDepositMutation,
+  useGetDepositListQuery,
+} from "../../features/api/depositListApiSlice";
+import { useGetUsersQuery } from "../../features/api/logInApiSlice";
+import { Link } from "react-router-dom";
 const DepositList = () => {
   const [validated, setValidated] = useState(false);
   const [show, setShow] = useState(false);
+  const [depositAdd, setDepositAdd] = useState();
+
+  const { data: allUser } = useGetUsersQuery();
+  const [addDeposit] = useAddDepositMutation();
+  const { data: allDepositList, isFetching } = useGetDepositListQuery();
+
+  // console.log(allDepositList);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const handleSubmit = (event) => {
+    event.preventDefault();
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
     }
 
     setValidated(true);
+
+    addDeposit(depositAdd);
+    console.log(depositAdd);
+  };
+
+  const handleOnChange = (e) => {
+    setDepositAdd({ ...depositAdd, [e.target.name]: e.target.value });
   };
 
   return (
@@ -56,28 +77,24 @@ const DepositList = () => {
                       controlId="validationCustom01"
                     >
                       <Form.Label>Name</Form.Label>
-                      <Form.Select aria-label="Default select example">
+                      <Form.Select
+                        name="name"
+                        onChange={handleOnChange}
+                        aria-label="Default select example"
+                      >
                         <option style={{ backgroundColor: "#1e293b" }}>
-                          Open this select menu
+                          Select a member
                         </option>
-                        <option
-                          style={{ backgroundColor: "#1e293b" }}
-                          value="1"
-                        >
-                          One
-                        </option>
-                        <option
-                          style={{ backgroundColor: "#1e293b" }}
-                          value="2"
-                        >
-                          Two
-                        </option>
-                        <option
-                          style={{ backgroundColor: "#1e293b" }}
-                          value="3"
-                        >
-                          Three
-                        </option>
+                        {allUser?.map((name) => (
+                          <option
+                            key={name?._id}
+                            style={{ backgroundColor: "#1e293b" }}
+                            value={name?.userName}
+                            name={name?.userName}
+                          >
+                            {name?.userName}
+                          </option>
+                        ))}
                       </Form.Select>
                       <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                       <Form.Control.Feedback type="invalid">
@@ -93,8 +110,10 @@ const DepositList = () => {
                       <Form.Label>Deposit amount</Form.Label>
                       <Form.Control
                         required
-                        type="number"
+                        type="text"
                         placeholder="Enter a deposit amount"
+                        name="deposit_amount"
+                        onChange={handleOnChange}
                         // defaultValue="Otto"
                       />
                       <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -112,8 +131,10 @@ const DepositList = () => {
                       <Form.Label>Extra amount</Form.Label>
                       <Form.Control
                         required
-                        type="number"
+                        type="text"
+                        name="extra_amount"
                         placeholder="Enter a extra amount"
+                        onChange={handleOnChange}
                         // defaultValue="Otto"
                       />
                       <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -131,8 +152,10 @@ const DepositList = () => {
                       <Form.Label>Get amount</Form.Label>
                       <Form.Control
                         required
-                        type="number"
+                        type="text"
+                        name="get_amount"
                         placeholder="Enter a get amount"
+                        onChange={handleOnChange}
                         // defaultValue="Otto"
                       />
                       <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -150,47 +173,121 @@ const DepositList = () => {
       </div>
 
       <Container fluid className="overflow-auto">
-        <Table striped bordered hover variant="dark">
-          <thead>
-            <tr>
-              <th>Date&Month</th>
-              <th>Name</th>
-              <th>Deposit Amount</th>
-              <th>Extra Amount</th>
-              <th>Get Amount</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>4/26/2023</td>
-              <td>Mark</td>
-              <td>10000</td>
-              <td>0</td>
-              <td>429</td>
-              <td className="d-flex flex-row">
-                <OverlayTrigger
-                  className=""
-                  overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
-                >
-                  <span className="d-inline-block me-2">
-                    <Button>
-                      <i className="fa-solid fa-pen-to-square"></i>
-                    </Button>
-                  </span>
-                </OverlayTrigger>
-              </td>
-            </tr>
-            <tr>
-              <td>Total</td>
-              <td></td>
-              <td>= 23000</td>
-              <td>= 23000</td>
-              <td>= 23000</td>
-              <td></td>
-            </tr>
-          </tbody>
-        </Table>
+        {isFetching ? (
+          <>
+            <>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+              <Placeholder as="p" animation="glow">
+                <Placeholder
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    borderRadius: "5px",
+                  }}
+                  xs={12}
+                />
+              </Placeholder>
+            </>
+          </>
+        ) : (
+          <>
+            <Table striped bordered hover variant="dark">
+              <thead>
+                <tr>
+                  <th>Date&Month</th>
+                  <th>Name</th>
+                  <th>Deposit Amount</th>
+                  <th>Extra Amount</th>
+                  <th>Get Amount</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allDepositList?.map((deposit) => (
+                  <tr>
+                    <td>{deposit?.date}</td>
+                    <td>{deposit?.name}</td>
+                    <td>{deposit?.deposit_amount}</td>
+                    <td>{deposit?.extra_amount}</td>
+                    <td>{deposit?.get_amount}</td>
+                    <td className="d-flex flex-row">
+                      <OverlayTrigger
+                        className=""
+                        overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
+                      >
+                        <span className="d-inline-block me-2">
+                          <Link to={`/update_deposit_list/${deposit?._id}`}>
+                            <Button>
+                              <i className="fa-solid fa-pen-to-square"></i>
+                            </Button>
+                          </Link>
+                        </span>
+                      </OverlayTrigger>
+                    </td>
+                  </tr>
+                ))}
+
+                <tr>
+                  <td>Total</td>
+                  <td></td>
+                  <td>= 23000</td>
+                  <td>= 23000</td>
+                  <td>= 23000</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </Table>
+          </>
+        )}
       </Container>
     </div>
   );
