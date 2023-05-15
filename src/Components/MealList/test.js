@@ -24,10 +24,11 @@ export default function Test() {
     );
   }
 
-  const currentDate = new Date();
-  const currentDay = currentDate.getDate();
+
 
   useEffect(() => {
+    const currentDate = new Date();
+    const currentDay = currentDate.getDate();
     const generatedData = Array.from({ length: 31 }, (_, index) => {
       const rowData = {
         rowNumber: index + 1,
