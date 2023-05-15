@@ -16,7 +16,6 @@ import { Badge, Button, Dropdown } from "react-bootstrap";
 import Notification from "./Pages/Notifications/Notification";
 import Profile from "./Components/Profile/Profile";
 import UpdateProfile from "./Components/Profile/UpdateProfile";
-import Logout from "./Services/Logout/Logout";
 import Login from "./Services/Login/Login";
 import AddMember from "./Components/Members/AddMember";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +23,8 @@ import PrivateComponent from "./Layout/PrivateComponent";
 import UpdateMember from "./Components/Members/UpdateMember/UpdateMember";
 import AddNewMeal from "./Components/MealList/AddNewMeal";
 import UpdateBazarList from "./Components/BazarList/UpdateBazarList/UpdateBazarList";
+import Questionary from "./Pages/Questionaries/Questionary";
+import Test from "../src/Components/MealList/test";
 // import { useGetUsersQuery } from "./features/api/logInApiSlice";
 
 function App() {
@@ -35,8 +36,8 @@ function App() {
 
   useEffect(() => {
     if (logInUser) {
-      setRole(convertData.category);
-      setName(convertData.userName);
+      setRole(convertData?.category);
+      setName(convertData?.userName);
     }
   }, [convertData?.category, convertData?.userName, logInUser]);
 
@@ -44,8 +45,6 @@ function App() {
     localStorage.removeItem("login_user");
     navigate("/login");
     window.location.reload();
-
-    console.log("click");
   };
 
   return (
@@ -66,12 +65,12 @@ function App() {
                     <NavDropdown
                       title="Members"
                       id="basic-nav-dropdown"
-                      className="member_dropdown me-5"
+                      className="member_dropdown"
                     >
                       <NavDropdown.Item>
                         <Link
                           to="/members"
-                          className="me-5 text-white text-decoration-none"
+                          className="text-white text-decoration-none"
                         >
                           All Member
                         </Link>
@@ -80,12 +79,12 @@ function App() {
                     <NavDropdown
                       title="Meal List"
                       id="basic-nav-dropdown"
-                      className="member_dropdown me-5"
+                      className="member_dropdown"
                     >
                       <NavDropdown.Item>
                         <Link
                           to="/meal_list"
-                          className="me-5 text-white text-decoration-none"
+                          className="text-white text-decoration-none"
                         >
                           Meal-List
                         </Link>
@@ -94,7 +93,7 @@ function App() {
                     <NavDropdown
                       title="bazar List"
                       id="basic-nav-dropdown"
-                      className="member_dropdown me-5"
+                      className="member_dropdown"
                     >
                       <NavDropdown.Item>
                         <Link
@@ -108,7 +107,7 @@ function App() {
                     <NavDropdown
                       title="Deposit List"
                       id="basic-nav-dropdown"
-                      className="member_dropdown me-5"
+                      className="member_dropdown"
                     >
                       <NavDropdown.Item>
                         <Link
@@ -128,7 +127,7 @@ function App() {
                       </NavDropdown.Item>
                     </NavDropdown>
                     <Dropdown
-                      className="mb-2 me-5"
+                      className="mb-2"
                       style={{ background: "transparent" }}
                     >
                       <Dropdown.Toggle variant="info" id="dropdown-basic">
@@ -237,9 +236,6 @@ function App() {
                       </Dropdown.Menu>
                       <Dropdown.Divider />
                     </Dropdown>
-                    {/* <Button className="me-5 mb-2" variant="info">
-                      Logout
-                    </Button>{" "} */}
                     <img
                       src="https://dashcode.codeshaper.net/assets/user-1-ad58ce72.jpg"
                       className="rounded me-0"
@@ -311,7 +307,7 @@ function App() {
                   <NavDropdown
                     title="Meal List"
                     id="basic-nav-dropdown"
-                    className="member_dropdown me-5"
+                    className="member_dropdown"
                   >
                     <NavDropdown.Item>
                       <Link
@@ -325,7 +321,7 @@ function App() {
                   <NavDropdown
                     title="bazar List"
                     id="basic-nav-dropdown"
-                    className="member_dropdown me-5"
+                    className="member_dropdown"
                   >
                     <NavDropdown.Item>
                       <Link
@@ -339,7 +335,7 @@ function App() {
                   <NavDropdown
                     title="Deposit List"
                     id="basic-nav-dropdown"
-                    className="member_dropdown me-5"
+                    className="member_dropdown"
                   >
                     <NavDropdown.Item>
                       <Link
@@ -351,7 +347,7 @@ function App() {
                     </NavDropdown.Item>
                   </NavDropdown>
                   <Dropdown
-                    className="mb-2 me-5"
+                    className="mb-2"
                     style={{ background: "transparent" }}
                   >
                     <Dropdown.Toggle variant="info" id="dropdown-basic">
@@ -519,7 +515,7 @@ function App() {
                   <NavDropdown
                     title="Members"
                     id="basic-nav-dropdown"
-                    className="member_dropdown me-5"
+                    className="member_dropdown"
                   >
                     <NavDropdown.Item>
                       <Link
@@ -533,7 +529,7 @@ function App() {
                   <NavDropdown
                     title="Meal List"
                     id="basic-nav-dropdown"
-                    className="member_dropdown me-5"
+                    className="member_dropdown"
                   >
                     <NavDropdown.Item>
                       <Link
@@ -547,7 +543,7 @@ function App() {
                   <NavDropdown
                     title="bazar List"
                     id="basic-nav-dropdown"
-                    className="member_dropdown me-5"
+                    className="member_dropdown"
                   >
                     <NavDropdown.Item>
                       <Link
@@ -561,7 +557,7 @@ function App() {
                   <NavDropdown
                     title="Deposit List"
                     id="basic-nav-dropdown"
-                    className="member_dropdown me-5"
+                    className="member_dropdown"
                   >
                     <NavDropdown.Item>
                       <Link
@@ -581,7 +577,7 @@ function App() {
                     </NavDropdown.Item> */}
                   </NavDropdown>
                   <Dropdown
-                    className="mb-2 me-5"
+                    className="mb-2 me-2"
                     style={{ background: "transparent" }}
                   >
                     <Dropdown.Toggle variant="info" id="dropdown-basic">
@@ -783,7 +779,6 @@ function App() {
           <Route path="/notification" element={<Notification />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/update_profile" element={<UpdateProfile />}></Route>
-          <Route path="/logout" element={<Logout />}></Route>
         </Route>
         {/* <Route path="/" element={<Dashboard />}></Route>
           <Route path="/members" element={<Members />}></Route>
@@ -803,6 +798,8 @@ function App() {
           <Route path="/update_profile" element={<UpdateProfile />}></Route>
           <Route path="/logout" element={<Logout />}></Route> */}
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/question" element={<Questionary />}></Route>
+        <Route path="/test" element={<Test />}></Route>
       </Routes>
     </div>
   );

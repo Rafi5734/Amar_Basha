@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 const AddMember = () => {
   const navigate = useNavigate();
-  const [addUser, isLoading] = useAddUserMutation();
+  const [addUser, { isLoading }] = useAddUserMutation();
   // console.log(data);
   const [validated, setValidated] = useState(false);
   const [userName, setUserName] = useState("");
@@ -43,7 +43,7 @@ const AddMember = () => {
     });
 
     navigate("/members");
-    window.location.reload();
+    // window.location.reload();
 
     setValidated(true);
   };

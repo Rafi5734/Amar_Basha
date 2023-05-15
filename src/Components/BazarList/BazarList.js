@@ -11,13 +11,12 @@ import {
 } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
-import { useGetUsersQuery } from "../../features/api/logInApiSlice";
+import { useGetUsersQuery } from "../../features/api/addUserApiSlice";
 import {
   useAddbazarMutation,
   useGetBazarListQuery,
 } from "../../features/api/bazarListApiSlice";
 import { Link } from "react-router-dom";
-
 
 const BazarList = () => {
   let count = 1;
@@ -39,19 +38,19 @@ const BazarList = () => {
   useEffect(() => {
     setEveryUser(allUser?.map((user) => user?.userName));
 
-    const sumOfAmount = allBazarList.reduce(
+    const sumOfAmount = allBazarList?.reduce(
       (sum, user) => sum + Number(user.amount),
       0
     );
     setSumOfAmount(sumOfAmount);
 
-    const sumOfGivenAmount = allBazarList.reduce(
+    const sumOfGivenAmount = allBazarList?.reduce(
       (sum, user) => sum + Number(user.given_amount),
       0
     );
     setSumOfGivenAmount(sumOfGivenAmount);
 
-    const sumOfReturnAmount = allBazarList.reduce(
+    const sumOfReturnAmount = allBazarList?.reduce(
       (sum, user) => sum + Number(user.return_amount),
       0
     );

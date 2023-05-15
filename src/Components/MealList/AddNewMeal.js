@@ -8,7 +8,7 @@ import {
   Placeholder,
 } from "react-bootstrap";
 import { useAddMealMutation } from "../../features/api/mealListApiSlice";
-import { useGetUsersQuery } from "../../features/api/logInApiSlice";
+import { useGetUsersQuery } from "../../features/api/addUserApiSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function AddNewMeal() {

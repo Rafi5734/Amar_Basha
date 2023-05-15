@@ -17,7 +17,7 @@ const UpdateDeposit = () => {
   const [extraAmount, setExtraAmount] = useState();
   const [getAmount, setGetAmount] = useState();
 
-  const { data: singleDeposit, isFetching } = useGetSingleDepositQuery(id);
+  const { data: singleDeposit } = useGetSingleDepositQuery(id);
   const [updateSingleDeposit] = useUpdateSingleDepositMutation();
 
   // console.log(singleDeposit);
@@ -40,7 +40,7 @@ const UpdateDeposit = () => {
       },
     });
 
-    // navigate("/bazar_list");
+    navigate("/bazar_list");
   };
   return (
     <div>

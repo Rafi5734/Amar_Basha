@@ -54,7 +54,7 @@ export default function UpdateMember() {
       },
     });
     navigate("/members");
-    window.location.reload();
+    // window.location.reload();
 
     setValidated(true);
   };

@@ -18,7 +18,7 @@ import {
   useAddDepositMutation,
   useGetDepositListQuery,
 } from "../../features/api/depositListApiSlice";
-import { useGetUsersQuery } from "../../features/api/logInApiSlice";
+import { useGetUsersQuery } from "../../features/api/addUserApiSlice";
 import { Link } from "react-router-dom";
 const DepositList = () => {
   const [validated, setValidated] = useState(false);

@@ -20,6 +20,11 @@ export const addUserApiSlice = createApi({
       invalidatesTags: ["add_user"],
     }),
 
+    getUsers: builder.query({
+      query: () => "/add_user",
+      providesTags: ["add_user"],
+    }),
+
     getSingleUser: builder.query({
       query: (id) => `/add_user/${id}`,
       providesTags: (result, error, arg) => [{ type: "add_user", id: arg }],
@@ -31,7 +36,7 @@ export const addUserApiSlice = createApi({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["all_user"],
+      invalidatesTags: ["add_user"],
     }),
 
     deleteUser: builder.mutation({
@@ -39,7 +44,7 @@ export const addUserApiSlice = createApi({
         url: `/add_user/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["all_user"],
+      invalidatesTags: ["add_user"],
     }),
 
     makeRole: builder.mutation({
@@ -48,12 +53,13 @@ export const addUserApiSlice = createApi({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["all_user"],
+      invalidatesTags: ["add_user"],
     }),
   }),
 });
 
 export const {
+  useGetUsersQuery,
   useAddUserMutation,
   useGetSingleUserQuery,
   useUpdateSingleUserMutation,

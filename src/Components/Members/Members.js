@@ -6,11 +6,10 @@ import {
   OverlayTrigger,
   Tooltip,
   Dropdown,
-  Spinner,
 } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
-import { useGetUsersQuery } from "../../features/api/logInApiSlice";
+import { useGetUsersQuery } from "../../features/api/addUserApiSlice";
 import {
   useDeleteUserMutation,
   useMakeRoleMutation,
@@ -25,66 +24,78 @@ const Members = () => {
 
   const [role, setRole] = useState("");
   const logInUser = localStorage.getItem("login_user");
+  const parsingData = JSON.parse(logInUser);
+  console.log(parsingData.category);
+  const totalMessMember = localStorage.getItem("mess_member");
   const convertData = JSON.parse(logInUser);
 
   useEffect(() => {
     if (logInUser) {
       setRole(convertData?.category);
     }
-    // console.log(allUsers);
   }, [logInUser, convertData?.category]);
 
-  // let content = null;
   let count = 1;
 
   const handleDeleteUser = (id) => {
-    // const deleteUser = allUser.filter((user) => user.id === id);
     if (id) {
       deleteUser(id);
     }
-
-    window.location.reload();
   };
 
   const handleMemberRole = (roleMake, id) => {
+    // console.log((parsingData.category = roleMake));
     makeRole({
       id,
       data: {
         category: roleMake,
       },
     });
-    // makeRole(id, roleMake);
-    window.location.reload();
   };
 
   const handleManagerRole = (roleMake, id) => {
+    // console.log((parsingData.category = roleMake));
     makeRole({
       id,
       data: {
         category: roleMake,
       },
     });
-    // makeRole(id, roleMake);
-    window.location.reload();
   };
 
   return (
     <div className="members_main">
       <div className="d-flex flex-row justify-content-around">
         <h1 className="text-center pt-3  pb-3 text-center">All Members</h1>
-        {role === "superAdmin" && (
-          <OverlayTrigger
-            overlay={<Tooltip id="tooltip-disabled">Add Member</Tooltip>}
-          >
-            <span className="d-inline-block mt-4">
-              <Link to="/add_members">
-                <Button variant="primary">
-                  <i class="fa-solid fa-plus"></i>
+        {role === "superAdmin" &&
+          Number(totalMessMember) === allUsers?.length && (
+            <OverlayTrigger
+              overlay={<Tooltip id="tooltip-disabled">Add Member</Tooltip>}
+            >
+              <span className="d-inline-block mt-4">
+                <Button disabled variant="primary">
+                  <Link to="/add_members">
+                    <i class="fa-solid fa-plus"></i>
+                  </Link>
                 </Button>{" "}
-              </Link>
-            </span>
-          </OverlayTrigger>
-        )}
+              </span>
+            </OverlayTrigger>
+          )}
+
+        {role === "superAdmin" &&
+          Number(totalMessMember) > allUsers?.length && (
+            <OverlayTrigger
+              overlay={<Tooltip id="tooltip-disabled">Add Member</Tooltip>}
+            >
+              <span className="d-inline-block mt-4">
+                <Button variant="primary">
+                  <Link to="/add_members">
+                    <i class="fa-solid fa-plus"></i>
+                  </Link>
+                </Button>{" "}
+              </span>
+            </OverlayTrigger>
+          )}
       </div>
 
       <Container className="overflow-auto">
@@ -186,30 +197,9 @@ const Members = () => {
                           }
                         >
                           <span className="d-inline-block me-2">
-                            {isFetching ? (
-                              <>
-                                <Button variant="primary" disabled>
-                                  <Spinner
-                                    as="span"
-                                    animation="border"
-                                    size="sm"
-                                    role="status"
-                                    aria-hidden="true"
-                                  />
-                                  <span className="visually-hidden">
-                                    Loading...
-                                  </span>
-                                </Button>
-                              </>
-                            ) : (
-                              <>
-                                <Button
-                                  onClick={() => handleDeleteUser(user._id)}
-                                >
-                                  <i class="fa-solid fa-trash"></i>
-                                </Button>
-                              </>
-                            )}
+                            <Button onClick={() => handleDeleteUser(user._id)}>
+                              <i class="fa-solid fa-trash"></i>
+                            </Button>
                           </span>
                         </OverlayTrigger>
                         <Dropdown>
