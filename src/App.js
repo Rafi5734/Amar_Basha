@@ -744,7 +744,7 @@ function App() {
         </Container>
       </Navbar>
       {/* start contact button in bottom position */}
-      <Navbar fixed="bottom">
+      <Navbar fixed="bottom" className="bottom_navbar">
         <Container fluid>
           <Navbar.Collapse className="justify-content-end">
             <Button>

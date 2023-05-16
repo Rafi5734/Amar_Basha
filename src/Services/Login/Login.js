@@ -118,33 +118,11 @@ const Login = () => {
                         Please enter your valid email address.
                       </Form.Control.Feedback>
                     </Form.Group>
-                    {/* <Form.Group
-                      className="mt-3"
-                      as={Col}
-                      md="12"
-                      controlId="validationCustom02"
-                    >
-                      <Form.Label>How many member stay in house?</Form.Label>
-                      <Form.Control
-                        required
-                        type="email"
-                        placeholder="Enter member quantity"
-                        name="email"
-                        value={memberNumber}
-                        onChange={(e) => {
-                          setMemberNumber(e.target.value);
-                        }}
-                      />
-                      <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                      <Form.Control.Feedback type="invalid">
-                        Please enter your valid number.
-                      </Form.Control.Feedback>
-                    </Form.Group> */}
                     <Form.Group
                       className="mt-3"
                       as={Col}
                       md="12"
-                      controlId="validationCustomUsername"
+                      controlId="validationCustomPassword"
                     >
                       <Form.Label>Password</Form.Label>
                       <InputGroup hasValidation>
@@ -196,7 +174,7 @@ const Login = () => {
                       className="mt-3"
                       as={Col}
                       md="12"
-                      controlId="validationCustom02"
+                      controlId="validationCustom05"
                     >
                       <Form.Label>Email Address</Form.Label>
                       <Form.Control
@@ -220,7 +198,7 @@ const Login = () => {
                           className="mt-3"
                           as={Col}
                           md="12"
-                          controlId="validationCustom02"
+                          controlId="validationCustom03"
                         >
                           <Form.Label>
                             How many member stay in house?
@@ -249,16 +227,16 @@ const Login = () => {
                           className="mt-3"
                           as={Col}
                           md="12"
-                          controlId="validationCustom02"
+                          controlId="validationCustom04"
                         >
                           <Form.Label>
                             How many member stay in house?
                           </Form.Label>
                           <Form.Control
                             required
-                            type="email"
+                            type="number"
                             placeholder="Enter member quantity"
-                            name="email"
+                            name="messMember"
                             value={memberNumber}
                             onChange={(e) => {
                               setMemberNumber(e.target.value);
@@ -278,7 +256,7 @@ const Login = () => {
                       className="mt-3"
                       as={Col}
                       md="12"
-                      controlId="validationCustomUsername"
+                      controlId="validationCustomPassword"
                     >
                       <Form.Label>Password</Form.Label>
                       <InputGroup hasValidation>

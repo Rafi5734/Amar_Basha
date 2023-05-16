@@ -24,8 +24,8 @@ const Members = () => {
 
   const [role, setRole] = useState("");
   const logInUser = localStorage.getItem("login_user");
-  const parsingData = JSON.parse(logInUser);
-  console.log(parsingData.category);
+  // const parsingData = JSON.parse(logInUser);
+  // console.log(parsingData.category);
   const totalMessMember = localStorage.getItem("mess_member");
   const convertData = JSON.parse(logInUser);
 

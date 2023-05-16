@@ -87,10 +87,11 @@ const MealList = () => {
 
   const handlePageClick = (event) => {
     setPageNumber(event.selected + 1);
+    // console.log(event.selected);
   };
 
   return (
-    <div className="bg_primary">
+    <div className="bg_primary mealList_main">
       <div>
         <div className="d-flex flex-row justify-content-around">
           <h1 className="pt-3 pb-3">Meal List current month:</h1>
@@ -315,10 +316,11 @@ const MealList = () => {
                 </tr>
               </tbody>
             </Table>
+
             <ReactPaginate
               nextLabel=">"
               onPageChange={handlePageClick}
-              pageRangeDisplayed={3}
+              pageRangeDisplayed={1}
               marginPagesDisplayed={2}
               pageCount={3}
               previousLabel="<"
@@ -334,6 +336,7 @@ const MealList = () => {
               containerClassName="pagination"
               activeClassName="active"
               renderOnZeroPageCount={null}
+              // className="md-5"
             />
           </Container>
         </>
