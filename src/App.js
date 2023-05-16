@@ -724,8 +724,6 @@ function App() {
                           Profile
                         </Link>
                       </Dropdown.Item>
-                      <Dropdown.Divider />
-                      <Dropdown.Divider />
                       <Dropdown.Item>
                         {/* <Link
                           className="text-decoration-none text-light"

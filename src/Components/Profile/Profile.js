@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Button } from "react-bootstrap";
+import { Container, Button, InputGroup } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "./profile.css";
@@ -82,9 +82,15 @@ const Profile = () => {
                   className="profile_picture"
                 ></img>
                 <div>
-                  <Button className="mb-3" variant="primary">
-                    Change Image
-                  </Button>{" "}
+                  <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Text id="inputGroup-sizing-sm">
+                      Small
+                    </InputGroup.Text>
+                    <Form.Control
+                      aria-label="Small"
+                      aria-describedby="inputGroup-sizing-sm"
+                    />
+                  </InputGroup>
                   <Button
                     onClick={handleShow}
                     className="mb-3"
@@ -206,7 +212,7 @@ const Profile = () => {
               Total meal this month: <span className="">10000</span>
             </p>
             <p>
-              Total bazar this month: <span className="">10000</span>
+              Total bazar done this month: <span className="">4</span>
             </p>
           </Col>
         </Row>
