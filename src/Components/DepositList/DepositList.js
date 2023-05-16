@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../../assets/global.css";
 import {
   Button,
@@ -24,15 +24,38 @@ const DepositList = () => {
   const [validated, setValidated] = useState(false);
   const [show, setShow] = useState(false);
   const [depositAdd, setDepositAdd] = useState();
+  const [totalDepositAmount, setTotalDepositAmount] = useState(0);
+  const [totalExtraAmount, setTotalExtraAmount] = useState(0);
+  const [totalGetAmount, setTotalGetAmount] = useState(0);
 
   const { data: allUser } = useGetUsersQuery();
   const [addDeposit] = useAddDepositMutation();
   const { data: allDepositList, isFetching } = useGetDepositListQuery();
 
-  // console.log(allDepositList);
+  console.log(allDepositList);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  useEffect(() => {
+    const sumOfTotalDepositAmount = allDepositList?.reduce(
+      (sum, deposit_amount) => sum + Number(deposit_amount?.deposit_amount),
+      0
+    );
+    setTotalDepositAmount(sumOfTotalDepositAmount);
+
+    const sumOfTotalExtraAmount = allDepositList?.reduce(
+      (sum, extra_amount) => sum + Number(extra_amount?.extra_amount),
+      0
+    );
+    setTotalExtraAmount(sumOfTotalExtraAmount);
+
+    const sumOfTotalGetAmount = allDepositList?.reduce(
+      (sum, get_amount) => sum + Number(get_amount?.get_amount),
+      0
+    );
+    setTotalGetAmount(sumOfTotalGetAmount);
+  }, [allDepositList]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -279,9 +302,9 @@ const DepositList = () => {
                 <tr>
                   <td>Total</td>
                   <td></td>
-                  <td>= 23000</td>
-                  <td>= 23000</td>
-                  <td>= 23000</td>
+                  <td>= {totalDepositAmount}</td>
+                  <td>= {totalExtraAmount}</td>
+                  <td>= {totalGetAmount}</td>
                   <td></td>
                 </tr>
               </tbody>
