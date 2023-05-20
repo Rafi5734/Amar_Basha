@@ -30,14 +30,14 @@ import Test from "../src/Components/MealList/test";
 function App() {
   const navigate = useNavigate();
   const [role, setRole] = useState("");
-  const [name, setName] = useState("");
+  // const [name, setName] = useState("");
   const logInUser = localStorage.getItem("login_user");
   const convertData = JSON.parse(logInUser);
 
   useEffect(() => {
     if (logInUser) {
       setRole(convertData?.category);
-      setName(convertData?.userName);
+      // setName(convertData?.userName);
     }
   }, [convertData?.category, convertData?.userName, logInUser]);
 
@@ -253,7 +253,7 @@ function App() {
                         id="dropdown-basic"
                         className="border-0"
                       >
-                        <span>{name}</span>
+                        <span>{convertData?.userName}</span>
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu
@@ -476,7 +476,7 @@ function App() {
                       id="dropdown-basic"
                       className="border-0"
                     >
-                      <span>{name}</span>
+                      <span>{convertData?.userName}</span>
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu
@@ -706,7 +706,7 @@ function App() {
                       id="dropdown-basic"
                       className="border-0"
                     >
-                      <span>{name}</span>
+                      <span>{convertData?.userName}</span>
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu

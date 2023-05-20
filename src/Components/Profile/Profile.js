@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Button, InputGroup } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "./profile.css";
@@ -15,9 +15,64 @@ import {
 } from "recharts";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
+import { useGetUsersQuery } from "../../features/api/addUserApiSlice";
+import { useGetMealListQuery } from "../../features/api/mealListApiSlice";
 
 const Profile = () => {
+  const { data: allUser } = useGetUsersQuery();
+  const { data: allMealList } = useGetMealListQuery();
+  const login_user = JSON.parse(localStorage.getItem("login_user"));
+
+  const values = allMealList?.map((item) => item?.allMeal);
+  // console.log("values", values);
+
+  const sumOfMealValues = (data, username) => {
+    return data
+      ?.filter((item) => item[username])
+      ?.reduce((sum, item) => sum + parseInt(item[username]), 0);
+  };
+
+  const sumOfLoginUserMeal = sumOfMealValues(values, login_user?.userName);
+
+  // console.log(sum);
+
+  const findUserById = (id) => {
+    return allUser?.find((user) => user._id === id);
+  };
+
+  const findUser = findUserById(login_user._id);
+
   const [show, setShow] = useState(false);
+  const [validated, setValidated] = useState(false);
+  const [uploadImage, setUploadImage] = useState(null);
+  const [name, setName] = useState(findUser?.userName);
+  const [email, setEmail] = useState(findUser?.email);
+  const [phoneNumber, setPhoneNumber] = useState(findUser?.phone);
+  const [workPlace, setWorkPlace] = useState(findUser?.working_place);
+  const [status, setStatus] = useState(findUser?.status);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+    }
+
+    setValidated(true);
+
+    const data = {
+      image: uploadImage,
+      _id: findUser?._id,
+      userName: name || findUser?.userName,
+      email: email || findUser?.email,
+      phone: phoneNumber || findUser?.phone,
+      working_place: workPlace || findUser?.working_place,
+      status: status || findUser?.status,
+      category: findUser?.category,
+    };
+    localStorage.setItem("login_user", JSON.stringify(data));
+    console.log(data);
+  };
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -66,7 +121,7 @@ const Profile = () => {
     },
   ];
   return (
-    <div className="bg_primary pb-5">
+    <div className="bg_primary pb-5" style={{ height: "100vh" }}>
       <h1 className="text-center pt-3 pb-3">Profile</h1>
       <Container
         className="mb-3 rounded overflow-auto"
@@ -82,15 +137,6 @@ const Profile = () => {
                   className="profile_picture"
                 ></img>
                 <div>
-                  <InputGroup size="sm" className="mb-3">
-                    <InputGroup.Text id="inputGroup-sizing-sm">
-                      Small
-                    </InputGroup.Text>
-                    <Form.Control
-                      aria-label="Small"
-                      aria-describedby="inputGroup-sizing-sm"
-                    />
-                  </InputGroup>
                   <Button
                     onClick={handleShow}
                     className="mb-3"
@@ -106,7 +152,24 @@ const Profile = () => {
                       <Modal.Title>Update Profile</Modal.Title>
                     </Modal.Header>
                     <Modal.Body style={{ backgroundColor: "#334155" }}>
-                      <Form>
+                      <Form
+                        noValidate
+                        validated={validated}
+                        onSubmit={handleSubmit}
+                      >
+                        <Form.Group
+                          className="mb-3"
+                          controlId="exampleForm.ControlInput1"
+                        >
+                          <Form.Label>Update profile picture</Form.Label>
+                          <Form.Control
+                            aria-label="Small"
+                            aria-describedby="inputGroup-sizing-sm"
+                            type="file"
+                            accept="image/gif, image/png, image/jpeg"
+                            onChange={(e) => setUploadImage(e.target.files[0])}
+                          />
+                        </Form.Group>
                         <Form.Group
                           className="mb-3"
                           controlId="exampleForm.ControlInput1"
@@ -116,26 +179,9 @@ const Profile = () => {
                             type="text"
                             placeholder="Change your name"
                             autoFocus
+                            onChange={(e) => setName(e.target.value)}
+                            defaultValue={name || findUser?.userName}
                           />
-                        </Form.Group>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="exampleForm.ControlInput1"
-                        >
-                          <Form.Label>Member category</Form.Label>
-                          <Form.Select
-                            style={{
-                              backgroundColor: "#334155",
-                              color: "#fff",
-                            }}
-                            size="sm"
-                            aria-label="Default select example"
-                          >
-                            <option>Select a option</option>
-                            <option value="member">Member</option>
-                            <option value="manager">Manager</option>
-                            {/* <option value="3">Three</option> */}
-                          </Form.Select>
                         </Form.Group>
                         <Form.Group
                           className="mb-3"
@@ -146,17 +192,21 @@ const Profile = () => {
                             type="email"
                             placeholder="Change your email"
                             autoFocus
+                            onChange={(e) => setEmail(e.target.value)}
+                            defaultValue={email || findUser?.email}
                           />
                         </Form.Group>
                         <Form.Group
                           className="mb-3"
                           controlId="exampleForm.ControlInput1"
                         >
-                          <Form.Label>Phone</Form.Label>
+                          <Form.Label>Phone number</Form.Label>
                           <Form.Control
                             type="text"
                             placeholder="Change your phone number"
                             autoFocus
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            defaultValue={phoneNumber || findUser?.phone}
                           />
                         </Form.Group>
                         <Form.Group
@@ -168,18 +218,38 @@ const Profile = () => {
                             type="text"
                             placeholder="Change your work place"
                             autoFocus
+                            onChange={(e) => setWorkPlace(e.target.value)}
+                            defaultValue={workPlace || findUser?.working_place}
                           />
                         </Form.Group>
+                        <Form.Group
+                          className="mb-3"
+                          controlId="exampleForm.ControlInput1"
+                        >
+                          <Form.Label>Status</Form.Label>
+                          <Form.Control
+                            type="text"
+                            placeholder="Change your status"
+                            autoFocus
+                            onChange={(e) => setStatus(e.target.value)}
+                            defaultValue={status || findUser?.status}
+                          />
+                        </Form.Group>
+
+                        <Modal.Footer style={{ backgroundColor: "#334155" }}>
+                          <Button variant="secondary" onClick={handleClose}>
+                            Close
+                          </Button>
+                          <Button
+                            type="submit"
+                            variant="primary"
+                            onClick={handleClose}
+                          >
+                            Update profile
+                          </Button>
+                        </Modal.Footer>
                       </Form>
                     </Modal.Body>
-                    <Modal.Footer style={{ backgroundColor: "#334155" }}>
-                      <Button variant="secondary" onClick={handleClose}>
-                        Close
-                      </Button>
-                      <Button variant="primary" onClick={handleClose}>
-                        Save Changes
-                      </Button>
-                    </Modal.Footer>
                   </Modal>
                 </div>
               </Col>
@@ -190,10 +260,10 @@ const Profile = () => {
               >
                 <div className="">
                   <div className="d-flex justify-content-center align-items-center">
-                    <p className="fw-bold">Waren Waden</p>
+                    <p className="fw-bold">{findUser?.userName}</p>
                   </div>
                   <div>
-                    <p className="fw-bold">member</p>
+                    <p className="fw-bold">{findUser?.category}</p>
                   </div>
                 </div>
               </Col>
@@ -209,7 +279,11 @@ const Profile = () => {
               Total deposit this month: <span className="">10000</span>
             </p>
             <p>
-              Total meal this month: <span className="">10000</span>
+              This month house rent: <span className="">10000</span>
+            </p>
+            <p>
+              Total meal this month:{" "}
+              <span className="">{sumOfLoginUserMeal}</span>
             </p>
             <p>
               Total bazar done this month: <span className="">4</span>
@@ -247,7 +321,7 @@ const Profile = () => {
               </svg>
               <div className="ms-2 d-flex flex-column">
                 <span>Email</span>
-                <span className="mt-0 mb-3">Email@gmail.com</span>
+                <span className="mt-0 mb-3">{findUser?.email}</span>
               </div>
             </div>
             <div className="d-flex flex-row">
@@ -272,7 +346,7 @@ const Profile = () => {
               </svg>
               <div className="ms-2 d-flex flex-column">
                 <span>Phone</span>
-                <span className="mt-0 mb-3">01887766556</span>
+                <span className="mt-0 mb-3">{findUser?.phone}</span>
               </div>
             </div>
             <div className="d-flex flex-row">
@@ -297,7 +371,7 @@ const Profile = () => {
               </svg>
               <div className="ms-2 d-flex flex-column">
                 <span>Work Place</span>
-                <span className="mt-0 mb-3">Glushan</span>
+                <span className="mt-0 mb-3">{findUser?.working_place}</span>
               </div>
             </div>
           </Col>
