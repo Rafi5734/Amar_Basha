@@ -3,7 +3,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const bazarListApiSlice = createApi({
   reducerPath: "bazarList",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8000",
+    // baseUrl: "http://localhost:8000",
+    baseUrl: `${process.env.REACT_APP_MESS_APP_BASE_URL}`,
   }),
   tagTypes: ["bazar_list"],
   endpoints: (builder) => ({
