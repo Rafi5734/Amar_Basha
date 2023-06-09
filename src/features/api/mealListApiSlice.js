@@ -3,8 +3,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const mealListApiSlice = createApi({
   reducerPath: "mealList",
   baseQuery: fetchBaseQuery({
-    // baseUrl: "http://localhost:8000",
-    baseUrl: `${process.env.REACT_APP_MESS_APP_BASE_URL}`,
+    baseUrl: "http://localhost:8000",
+    // baseUrl: `${process.env.REACT_APP_MESS_APP_BASE_URL}`,
   }),
   tagTypes: ["meal_list"],
   endpoints: (builder) => ({
@@ -21,7 +21,7 @@ export const mealListApiSlice = createApi({
     }),
 
     getMealList: builder.query({
-      query: (pageNumber) => `/meal_list?page=${pageNumber}&limit=31`,
+      query: () => `/meal_list`,
       providesTags: ["meal_list"],
     }),
 
@@ -46,6 +46,14 @@ export const mealListApiSlice = createApi({
       }),
       invalidatesTags: ["meal_list"],
     }),
+    deleteAllPreviousMealList: builder.mutation({
+      query: (previousMonthData) => ({
+        url: `/meal_list/delete_previous`,
+        method: "DELETE",
+        body: previousMonthData,
+      }),
+      invalidatesTags: ["meal_list"],
+    }),
   }),
 });
 
@@ -55,4 +63,5 @@ export const {
   useGetSingleMealQuery,
   useUpdateSingleMealMutation,
   useDeleteMealListMutation,
+  useDeleteAllPreviousMealListMutation,
 } = mealListApiSlice;

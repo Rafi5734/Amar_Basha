@@ -10,16 +10,23 @@ import {
   Placeholder,
 } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
-import Pagination from "react-bootstrap/Pagination";
 import { useGetUsersQuery } from "../../features/api/addUserApiSlice";
 import {
   useAddbazarMutation,
+  useDeleteAllPreviousBazarListMutation,
   useGetBazarListQuery,
 } from "../../features/api/bazarListApiSlice";
 import { Link } from "react-router-dom";
+import { CSVLink } from "react-csv";
 
 const BazarList = () => {
+  const login_user = JSON.parse(localStorage.getItem("login_user"));
+  const currentDate = new Date();
+  const currentMonthName = currentDate.toLocaleString("default", {
+    month: "long",
+  });
   let count = 1;
+
   const [validated, setValidated] = useState(false);
   const [addBazar, setAddBazar] = useState(false);
   const [bazarAdd, setBazarAdd] = useState({});
@@ -27,10 +34,19 @@ const BazarList = () => {
   const [sumOfAmount, setSumOfAmount] = useState("");
   const [sumOfGivenAmount, setSumOfGivenAmount] = useState("");
   const [sumOfReturnAmount, setSumOfReturnAmount] = useState("");
+  const [prevFilteredData, setPrevFilteredData] = useState([]);
+
+  const csvData = [
+    ["This Month", "Total cost this month"],
+    [currentMonthName, sumOfAmount],
+  ];
 
   const { data: allUser } = useGetUsersQuery();
   const [addbazar] = useAddbazarMutation();
   const { data: allBazarList, isFetching } = useGetBazarListQuery();
+  const [deleteAllPreviousBazarList] = useDeleteAllPreviousBazarListMutation();
+
+  // const totalMessMember = localStorage.getItem("mess_member");
 
   const handleAddBazarClose = () => setAddBazar(false);
   const handleAddBazarShow = () => setAddBazar(true);
@@ -57,7 +73,20 @@ const BazarList = () => {
     setSumOfReturnAmount(sumOfReturnAmount);
   }, [allUser, allBazarList]);
 
-  // console.log();
+  useEffect(() => {
+    const currentDate = new Date();
+    const previousMonth = currentDate.getMonth() - 1;
+
+    const filteredData = allBazarList?.filter((item) => {
+      const itemDate = new Date(item.date);
+      return (
+        itemDate.getMonth() === previousMonth &&
+        itemDate.getFullYear() === currentDate.getFullYear()
+      );
+    });
+
+    setPrevFilteredData(filteredData);
+  }, [allBazarList]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -71,124 +100,180 @@ const BazarList = () => {
     // console.log(bazarAdd);
   };
 
+  const handleDeleteAll = () => {
+    deleteAllPreviousBazarList(prevFilteredData);
+    console.log("delete all");
+  };
+
   const handleOnChange = (e) => {
     setBazarAdd({ ...bazarAdd, [e.target.name]: e.target.value });
   };
   return (
     <div className="bg_primary">
-      <div className="d-flex flex-row justify-content-around">
-        <h1 className="pt-3 pb-3">Current month bazar list: </h1>
-        <OverlayTrigger
-          overlay={<Tooltip id="tooltip-disabled">Add bazar</Tooltip>}
-        >
-          <span className="d-inline-block mt-4">
-            <Button variant="primary" onClick={handleAddBazarShow}>
-              <i className="fa-solid fa-plus"></i>
-            </Button>{" "}
-            <Modal
-              className="w-100"
-              show={addBazar}
-              onHide={handleAddBazarClose}
-            >
-              <Modal.Header style={{ backgroundColor: "#1e293b" }} closeButton>
-                <Modal.Title>Add Bazar</Modal.Title>
-              </Modal.Header>
-              <Modal.Body
-                style={{ backgroundColor: "#0f172a", borderRadius: "5px" }}
-              >
-                <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                  <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlInput1"
-                  >
-                    <Form.Label>Date</Form.Label>
-                    <Form.Control
-                      type="date"
-                      placeholder="Enter bazar date"
-                      name="date"
-                      onChange={handleOnChange}
-                    />
-                  </Form.Group>
-                  <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlInput1"
-                  >
-                    <Form.Label>Name</Form.Label>
-                    <Form.Select name="name" onChange={handleOnChange}>
-                      <option style={{ backgroundColor: "#1e293b" }}>
-                        Select a member
-                      </option>
-                      {everyUser?.map((name) => (
-                        <option
-                          style={{ backgroundColor: "#1e293b" }}
-                          value={name}
+      <Container>
+        <div className="d-flex flex-row justify-content-between">
+          <div className="d-flex flex-row align-items-center">
+            <h1 className="pt-3 pb-3">Current month bazar list: </h1>
+          </div>
+          <div>
+            {(login_user.category === "superAdmin" ||
+              login_user.category === "manager") && (
+              <>
+                <OverlayTrigger
+                  overlay={<Tooltip id="tooltip-disabled">Add bazar</Tooltip>}
+                >
+                  <span className="d-inline-block mt-4">
+                    <Button variant="primary" onClick={handleAddBazarShow}>
+                      <i className="fa-solid fa-plus"></i>
+                    </Button>{" "}
+                    <Modal
+                      className="w-100"
+                      show={addBazar}
+                      onHide={handleAddBazarClose}
+                    >
+                      <Modal.Header
+                        style={{ backgroundColor: "#1e293b" }}
+                        closeButton
+                      >
+                        <Modal.Title>Add Bazar</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body
+                        style={{
+                          backgroundColor: "#0f172a",
+                          borderRadius: "5px",
+                        }}
+                      >
+                        <Form
+                          noValidate
+                          validated={validated}
+                          onSubmit={handleSubmit}
                         >
-                          {name}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlInput1"
-                  >
-                    <Form.Label>Amount</Form.Label>
-                    <Form.Control
-                      type="number"
-                      placeholder="Enter bazar amount"
-                      name="amount"
-                      onChange={handleOnChange}
-                    />
-                  </Form.Group>
-                  <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlInput1"
-                  >
-                    <Form.Label>Given Amount</Form.Label>
-                    <Form.Control
-                      type="number"
-                      placeholder="Enter given amount"
-                      name="given_amount"
-                      onChange={handleOnChange}
-                    />
-                  </Form.Group>
-                  <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlInput1"
-                  >
-                    <Form.Label>Return Amount</Form.Label>
-                    <Form.Control
-                      type="number"
-                      placeholder="Enter return amount"
-                      name="return_amount"
-                      onChange={handleOnChange}
-                    />
-                  </Form.Group>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="exampleForm.ControlInput1"
+                          >
+                            <Form.Label>Date</Form.Label>
+                            <Form.Control
+                              type="date"
+                              placeholder="Enter bazar date"
+                              name="date"
+                              onChange={handleOnChange}
+                            />
+                          </Form.Group>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="exampleForm.ControlInput1"
+                          >
+                            <Form.Label>Name</Form.Label>
+                            <Form.Select name="name" onChange={handleOnChange}>
+                              <option style={{ backgroundColor: "#1e293b" }}>
+                                Select a member
+                              </option>
+                              {everyUser?.map((name, index) => (
+                                <option
+                                  key={index}
+                                  style={{ backgroundColor: "#1e293b" }}
+                                  value={name}
+                                >
+                                  {name}
+                                </option>
+                              ))}
+                            </Form.Select>
+                          </Form.Group>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="exampleForm.ControlInput1"
+                          >
+                            <Form.Label>Amount</Form.Label>
+                            <Form.Control
+                              type="number"
+                              placeholder="Enter bazar amount"
+                              name="amount"
+                              onChange={handleOnChange}
+                            />
+                          </Form.Group>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="exampleForm.ControlInput1"
+                          >
+                            <Form.Label>Given Amount</Form.Label>
+                            <Form.Control
+                              type="number"
+                              placeholder="Enter given amount"
+                              name="given_amount"
+                              onChange={handleOnChange}
+                            />
+                          </Form.Group>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="exampleForm.ControlInput1"
+                          >
+                            <Form.Label>Return Amount</Form.Label>
+                            <Form.Control
+                              type="number"
+                              placeholder="Enter return amount"
+                              name="return_amount"
+                              onChange={handleOnChange}
+                            />
+                          </Form.Group>
 
-                  <div className="mt-3 d-flex justify-content-end">
-                    <Button
-                      className="me-3"
-                      variant="secondary"
-                      onClick={handleAddBazarClose}
-                    >
-                      Close
-                    </Button>
-                    <Button
-                      onClick={handleAddBazarClose}
-                      type="submit"
-                      variant="primary"
-                    >
-                      Add Bazar
-                    </Button>
-                  </div>
-                </Form>
-              </Modal.Body>
-            </Modal>
-          </span>
-        </OverlayTrigger>
-      </div>
-
-      <Container fluid className="overflow-auto">
+                          <div className="mt-3 d-flex justify-content-end">
+                            <Button
+                              className="me-3"
+                              variant="secondary"
+                              onClick={handleAddBazarClose}
+                            >
+                              Close
+                            </Button>
+                            <Button
+                              onClick={handleAddBazarClose}
+                              type="submit"
+                              variant="primary"
+                            >
+                              Add Bazar
+                            </Button>
+                          </div>
+                        </Form>
+                      </Modal.Body>
+                    </Modal>
+                  </span>
+                </OverlayTrigger>
+              </>
+            )}
+            {(login_user.category === "superAdmin" ||
+              login_user.category === "manager") && (
+              <CSVLink data={csvData}>
+                <OverlayTrigger
+                  overlay={<Tooltip id="tooltip-disabled">Export Data</Tooltip>}
+                >
+                  <span className="d-inline-block mt-4 ms-2">
+                    <Button variant="primary">
+                      <i className="fa-solid fa-file-export"></i>
+                    </Button>{" "}
+                  </span>
+                </OverlayTrigger>
+              </CSVLink>
+            )}
+            {(login_user.category === "superAdmin" ||
+              login_user.category === "manager") && (
+              <OverlayTrigger
+                overlay={
+                  <Tooltip id="tooltip-disabled">
+                    Delete all previous data
+                  </Tooltip>
+                }
+              >
+                <span className="d-inline-block mt-4 ms-2">
+                  <Button variant="primary" onClick={handleDeleteAll}>
+                    <i className="fa-solid fa-trash"></i>
+                  </Button>{" "}
+                </span>
+              </OverlayTrigger>
+            )}
+          </div>
+        </div>
+      </Container>
+      <section className="overflow-auto">
         {isFetching ? (
           <>
             <Placeholder as="p" animation="glow">
@@ -253,7 +338,7 @@ const BazarList = () => {
             </Placeholder>
           </>
         ) : (
-          <>
+          <Container fluid>
             <Table striped bordered hover variant="dark">
               <thead>
                 <tr>
@@ -263,7 +348,12 @@ const BazarList = () => {
                   <th>Amount</th>
                   <th>Given</th>
                   <th>Return</th>
-                  <th>Actions</th>
+                  {(login_user.category === "superAdmin" ||
+                    login_user.category === "manager") && (
+                    <>
+                      <th>Actions</th>
+                    </>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -275,20 +365,25 @@ const BazarList = () => {
                     <td>{bazar?.amount}</td>
                     <td>{bazar?.given_amount}</td>
                     <td>{bazar?.return_amount}</td>
-                    <td className="d-flex flex-row">
-                      <OverlayTrigger
-                        className=""
-                        overlay={<Tooltip id="tooltip-disabled">Edit</Tooltip>}
-                      >
-                        <span className="d-inline-block me-2">
-                          <Link to={`/update_bazar_list/${bazar?._id}`}>
-                            <Button>
-                              <i className="fa-solid fa-pen-to-square"></i>
-                            </Button>
-                          </Link>
-                        </span>
-                      </OverlayTrigger>
-                    </td>
+                    {(login_user.category === "superAdmin" ||
+                      login_user.category === "manager") && (
+                      <td className="d-flex flex-row">
+                        <OverlayTrigger
+                          className=""
+                          overlay={
+                            <Tooltip id="tooltip-disabled">Edit</Tooltip>
+                          }
+                        >
+                          <span className="d-inline-block me-2">
+                            <Link to={`/update_bazar_list/${bazar?._id}`}>
+                              <Button>
+                                <i className="fa-solid fa-pen-to-square"></i>
+                              </Button>
+                            </Link>
+                          </span>
+                        </OverlayTrigger>
+                      </td>
+                    )}
                   </tr>
                 ))}
 
@@ -299,24 +394,13 @@ const BazarList = () => {
                   <td> = {sumOfAmount} </td>
                   <td> = {sumOfGivenAmount} </td>
                   <td> = {sumOfReturnAmount} </td>
-                  <td></td>
+                  {/* <td></td> */}
                 </tr>
               </tbody>
             </Table>
-          </>
+          </Container>
         )}
-
-        <Pagination>
-          <Pagination.Item>Prev</Pagination.Item>
-          <Pagination.Item>{1}</Pagination.Item>
-          <Pagination.Item>{2}</Pagination.Item>
-          <Pagination.Item>{3}</Pagination.Item>
-          <Pagination.Item active>{4}</Pagination.Item>
-          <Pagination.Item>{5}</Pagination.Item>
-          <Pagination.Item>{6}</Pagination.Item>
-          <Pagination.Item>Next</Pagination.Item>
-        </Pagination>
-      </Container>
+      </section>
     </div>
   );
 };

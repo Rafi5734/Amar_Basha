@@ -11,24 +11,43 @@ import { Link } from "react-router-dom";
 import {
   useDeleteMealListMutation,
   useGetMealListQuery,
+  useDeleteAllPreviousMealListMutation,
 } from "../../features/api/mealListApiSlice";
 import { useGetUsersQuery } from "../../features/api/addUserApiSlice";
-import ReactPaginate from "react-paginate";
+import { CSVLink } from "react-csv";
 
 const MealList = () => {
+  // const csvData = [];
   const [allMemberMeal, setAllMemberMeal] = useState([]);
   const [tableData, setTableData] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
+  const [csvMealData, setCSVMealData] = useState([]);
+
   const totalMessMember = localStorage.getItem("mess_member");
 
-  const { data: allMealList, isFetching } = useGetMealListQuery(pageNumber);
+  const { data: allMealList, isFetching } = useGetMealListQuery();
   const [deleteMealList] = useDeleteMealListMutation();
+  const [deleteAllPreviousMealList] = useDeleteAllPreviousMealListMutation();
   const { data: allUser } = useGetUsersQuery();
 
-  // console.log(allMealList);
+  const login_user = JSON.parse(localStorage.getItem("login_user"));
+
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+
+  const previousMonthData = allMealList?.filter((item) => {
+    const [day, month, year] = item.date.split("/");
+    const itemDate = new Date(year, month - 1, day);
+
+    return (
+      itemDate.getMonth() === currentMonth - 1 &&
+      itemDate.getFullYear() === currentYear
+    );
+  });
 
   useEffect(() => {
     const currentDate = new Date();
+
     const totalDays = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth() + 1,
@@ -45,8 +64,6 @@ const MealList = () => {
 
       const meal = allMealList?.find((item) => item.date === date);
 
-      // console.log(day);
-
       return {
         rowNumber: day,
         date,
@@ -58,10 +75,6 @@ const MealList = () => {
     // console.log(generatedData);
     setTableData(generatedData);
   }, [allMealList]);
-
-  // console.log(tableData);
-
-  // console.log(totalMealCount);
 
   useEffect(() => {
     const sumAllMeals = (array) => {
@@ -78,49 +91,132 @@ const MealList = () => {
 
     const totalMeals = sumAllMeals(allMealList || []);
     setAllMemberMeal(totalMeals);
-  }, [allMealList]);
+  }, [allMealList, allUser]);
+
+  useEffect(() => {
+    const csvData = Object.entries(allMemberMeal).map(([key, value]) => ({
+      headers: key,
+      data: value,
+    }));
+
+    const mealValue = csvData.map((value) => value.data);
+    setCSVMealData(String(mealValue));
+  }, [allMemberMeal]);
+
+  const headerKeys = Object.keys(allMemberMeal);
 
   const handleMealListDelete = (id) => {
     deleteMealList(id);
-    // console.log(id);
   };
 
-  const handlePageClick = (event) => {
-    setPageNumber(event.selected + 1);
-    // console.log(event.selected);
+  const handleDeleteAll = () => {
+    deleteAllPreviousMealList(previousMonthData);
   };
 
   return (
-    <div className="bg_primary mealList_main">
-      <div>
-        <div className="d-flex flex-row justify-content-around">
-          <h1 className="pt-3 pb-3">Meal List current month:</h1>
-          {Number(totalMessMember) > allUser?.length && (
-            <OverlayTrigger
-              overlay={<Tooltip id="tooltip-disabled">Add meal</Tooltip>}
-            >
-              <span className="d-inline-block mt-4">
-                <Button disabled variant="primary">
-                  <i className="fa-solid fa-plus"></i>
-                </Button>{" "}
-              </span>
-            </OverlayTrigger>
-          )}
-          {Number(totalMessMember) === allUser?.length && (
-            <OverlayTrigger
-              overlay={<Tooltip id="tooltip-disabled">Add meal</Tooltip>}
-            >
-              <span className="d-inline-block mt-4">
-                <Link to="/add_new_meal">
-                  <Button variant="primary">
-                    <i className="fa-solid fa-plus"></i>
-                  </Button>{" "}
-                </Link>
-              </span>
-            </OverlayTrigger>
-          )}
+    <div className="bg_primary">
+      <Container>
+        <div className="d-flex flex-row justify-content-between">
+          <div className="d-flex flex-row align-items-center">
+            <h1 className="pt-3 pb-3">Meal List current month:</h1>
+          </div>
+          <div>
+            {(login_user.category === "superAdmin" ||
+              login_user.category === "manager") && (
+              <>
+                {Number(totalMessMember) > allUser?.length && (
+                  <OverlayTrigger
+                    overlay={<Tooltip id="tooltip-disabled">Add meal</Tooltip>}
+                  >
+                    <span className="d-inline-block mt-4">
+                      <Button disabled variant="primary">
+                        <i className="fa-solid fa-plus"></i>
+                      </Button>{" "}
+                    </span>
+                  </OverlayTrigger>
+                )}
+                {Number(totalMessMember) === allUser?.length && (
+                  <OverlayTrigger
+                    overlay={<Tooltip id="tooltip-disabled">Add meal</Tooltip>}
+                  >
+                    <span className="d-inline-block mt-4">
+                      <Link to="/add_new_meal">
+                        <Button variant="primary">
+                          <i className="fa-solid fa-plus"></i>
+                        </Button>{" "}
+                      </Link>
+                    </span>
+                  </OverlayTrigger>
+                )}
+              </>
+            )}
+            {(login_user.category === "superAdmin" ||
+              login_user.category === "manager") && (
+              <>
+                {Number(totalMessMember) > allUser?.length && (
+                  <OverlayTrigger
+                    overlay={<Tooltip id="tooltip-disabled">Add meal</Tooltip>}
+                  >
+                    <span className="d-inline-block mt-4 me-2">
+                      <Button disabled variant="primary">
+                        <i className="fa-solid fa-plus"></i>
+                      </Button>{" "}
+                    </span>
+                  </OverlayTrigger>
+                )}
+                {Number(totalMessMember) === allUser?.length && (
+                  <CSVLink data={csvMealData} headers={headerKeys}>
+                    <OverlayTrigger
+                      overlay={
+                        <Tooltip id="tooltip-disabled">Export Data</Tooltip>
+                      }
+                    >
+                      <span className="d-inline-block mt-4 ms-2">
+                        <Button variant="primary">
+                          <i className="fa-solid fa-file-export"></i>
+                        </Button>{" "}
+                      </span>
+                    </OverlayTrigger>
+                  </CSVLink>
+                )}
+              </>
+            )}
+            {(login_user.category === "superAdmin" ||
+              login_user.category === "manager") && (
+              <>
+                {Number(totalMessMember) > allUser?.length && (
+                  <OverlayTrigger
+                    overlay={
+                      <Tooltip id="tooltip-disabled">Export Data</Tooltip>
+                    }
+                  >
+                    <span className="d-inline-block mt-4 me-2">
+                      <Button disabled variant="primary">
+                        <i className="fa-solid fa-plus"></i>
+                      </Button>{" "}
+                    </span>
+                  </OverlayTrigger>
+                )}
+                {Number(totalMessMember) === allUser?.length && (
+                  <OverlayTrigger
+                    overlay={
+                      <Tooltip id="tooltip-disabled">
+                        Delete all previous data
+                      </Tooltip>
+                    }
+                  >
+                    <span className="d-inline-block mt-4 ms-2">
+                      <Button variant="primary" onClick={handleDeleteAll}>
+                        <i className="fa-solid fa-trash"></i>
+                      </Button>{" "}
+                    </span>
+                  </OverlayTrigger>
+                )}
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      </Container>
 
       {isFetching ? (
         <>
@@ -188,13 +284,24 @@ const MealList = () => {
       ) : (
         <>
           <Container fluid className="overflow-auto">
+            {Number(totalMessMember) > allUser?.length && (
+              <div>
+                <h1 className="text-center">
+                  Add {Number(totalMessMember) - allUser?.length} more member{" "}
+                </h1>
+              </div>
+            )}
             <Table striped bordered hover variant="dark">
               <thead>
                 <tr>
                   <th>#Date</th>
                   <th colSpan={Number(totalMessMember)}>Name</th>
-                  {/* <th>Total</th> */}
-                  <th>Actions</th>
+                  {(login_user.category === "superAdmin" ||
+                    login_user.category === "manager") && (
+                    <>
+                      <th>Actions</th>
+                    </>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -203,56 +310,11 @@ const MealList = () => {
                   {allUser?.map((name) => (
                     <td key={name._id}>{name?.userName}</td>
                   ))}
-                  <td></td>
+                  {/* <td></td> */}
                 </tr>
-
-                {Number(totalMessMember) > allUser?.length && (
-                  <div>
-                    <h1>
-                      Add {Number(totalMessMember) - allUser?.length} more
-                      member{" "}
-                    </h1>
-                  </div>
-                )}
 
                 {Number(totalMessMember) === allUser?.length && (
                   <>
-                    {/* {allMealList?.map((meal) => (
-                      <tr key={meal?._id}>
-                        <td>
-                          #{count++}; {meal?.date}
-                        </td>
-                        {Object.keys(meal?.allMeal)?.map((key) => (
-                          <td key={key?._id}>{meal?.allMeal[key]}</td>
-                        ))}
-                        <td className="d-flex justify-content-around">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-disabled">Edit</Tooltip>
-                            }
-                          >
-                            <Link to={`/update_meal_list/${meal?._id}`}>
-                              <Button className="me-2">
-                                <i className="fa-solid fa-pen-to-square"></i>
-                              </Button>
-                            </Link>
-                          </OverlayTrigger>
-
-                          <OverlayTrigger
-                            className=""
-                            overlay={
-                              <Tooltip id="tooltip-disabled">Delete</Tooltip>
-                            }
-                          >
-                            <Button
-                              onClick={() => handleMealListDelete(meal?._id)}
-                            >
-                              <i className="fa-solid fa-trash"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                    ))} */}
                     {tableData.map((item) => (
                       <tr key={item.rowNumber}>
                         <td>{item.date}</td>
@@ -265,36 +327,43 @@ const MealList = () => {
                                 </>
                               )
                             )}
-                            <td className="d-flex justify-content-around">
-                              <OverlayTrigger
-                                overlay={
-                                  <Tooltip id="tooltip-disabled">Edit</Tooltip>
-                                }
-                              >
-                                <Link to={`/update_meal_list/${item?._id}`}>
-                                  <Button className="me-2">
-                                    <i className="fa-solid fa-pen-to-square"></i>
-                                  </Button>
-                                </Link>
-                              </OverlayTrigger>
+                            {(login_user.category === "superAdmin" ||
+                              login_user.category === "manager") && (
+                              <>
+                                <td className="d-flex justify-content-around">
+                                  <OverlayTrigger
+                                    overlay={
+                                      <Tooltip id="tooltip-disabled">
+                                        Edit
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <Link to={`/update_meal_list/${item?._id}`}>
+                                      <Button className="me-2">
+                                        <i className="fa-solid fa-pen-to-square"></i>
+                                      </Button>
+                                    </Link>
+                                  </OverlayTrigger>
 
-                              <OverlayTrigger
-                                className=""
-                                overlay={
-                                  <Tooltip id="tooltip-disabled">
-                                    Delete
-                                  </Tooltip>
-                                }
-                              >
-                                <Button
-                                  onClick={() =>
-                                    handleMealListDelete(item?._id)
-                                  }
-                                >
-                                  <i className="fa-solid fa-trash"></i>
-                                </Button>
-                              </OverlayTrigger>
-                            </td>
+                                  <OverlayTrigger
+                                    className=""
+                                    overlay={
+                                      <Tooltip id="tooltip-disabled">
+                                        Delete
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <Button
+                                      onClick={() =>
+                                        handleMealListDelete(item?._id)
+                                      }
+                                    >
+                                      <i className="fa-solid fa-trash"></i>
+                                    </Button>
+                                  </OverlayTrigger>
+                                </td>
+                              </>
+                            )}
                           </>
                         ) : (
                           <>
@@ -316,28 +385,6 @@ const MealList = () => {
                 </tr>
               </tbody>
             </Table>
-
-            <ReactPaginate
-              nextLabel=">"
-              onPageChange={handlePageClick}
-              pageRangeDisplayed={1}
-              marginPagesDisplayed={2}
-              pageCount={3}
-              previousLabel="<"
-              pageClassName="page-item"
-              pageLinkClassName="page-link"
-              previousClassName="page-item"
-              previousLinkClassName="page-link"
-              nextClassName="page-item"
-              nextLinkClassName="page-link"
-              breakLabel="..."
-              breakClassName="page-item"
-              breakLinkClassName="page-link"
-              containerClassName="pagination"
-              activeClassName="active"
-              renderOnZeroPageCount={null}
-              // className="md-5"
-            />
           </Container>
         </>
       )}

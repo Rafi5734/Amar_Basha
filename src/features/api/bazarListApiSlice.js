@@ -3,8 +3,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const bazarListApiSlice = createApi({
   reducerPath: "bazarList",
   baseQuery: fetchBaseQuery({
-    // baseUrl: "http://localhost:8000",
-    baseUrl: `${process.env.REACT_APP_MESS_APP_BASE_URL}`,
+    baseUrl: "http://localhost:8000",
+    // baseUrl: `${process.env.REACT_APP_MESS_APP_BASE_URL}`,
   }),
   tagTypes: ["bazar_list"],
   endpoints: (builder) => ({
@@ -25,11 +25,6 @@ export const bazarListApiSlice = createApi({
       providesTags: ["bazar_list"],
     }),
 
-    // getBazarList: builder.query({
-    //   query: (pageNumber) => `/meal_list?page=${pageNumber}&limit=31`,
-    //   providesTags: ["bazar_list"],
-    // }),
-
     getSingleBazar: builder.query({
       query: (id) => `/bazar_list/${id}`,
       providesTags: (result, error, arg) => [{ type: "bazar_list", id: arg }],
@@ -43,6 +38,14 @@ export const bazarListApiSlice = createApi({
       }),
       invalidatesTags: ["bazar_list"],
     }),
+    deleteAllPreviousBazarList: builder.mutation({
+      query: (previousMonthData) => ({
+        url: `/bazar_list/delete_previous`,
+        method: "DELETE",
+        body: previousMonthData,
+      }),
+      invalidatesTags: ["bazar_list"],
+    }),
   }),
 });
 
@@ -51,4 +54,5 @@ export const {
   useGetBazarListQuery,
   useGetSingleBazarQuery,
   useUpdateSingleBazarMutation,
+  useDeleteAllPreviousBazarListMutation,
 } = bazarListApiSlice;

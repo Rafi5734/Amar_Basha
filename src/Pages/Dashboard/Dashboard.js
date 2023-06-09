@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import "../../assets/global.css";
@@ -16,9 +16,28 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import io from "socket.io-client";
 
 const Dashboard = () => {
+  // const [message, setMessage] = useState("");
   const percentage = 41.5;
+
+  useEffect(() => {
+    const socket = io("http://localhost:8000"); // Replace with your server URL
+
+    // Receive data from the server
+    socket.on("message", (data) => {
+      console.log("Received data:", data);
+    });
+
+    // Send data to the server
+    socket.emit("message", "Hello from the client!");
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
   const data = [
     {
       name: "January",

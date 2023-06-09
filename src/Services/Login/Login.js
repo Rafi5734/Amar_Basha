@@ -14,25 +14,61 @@ const Login = () => {
   const navigate = useNavigate();
   const [validated, setValidated] = useState(false);
   const [name, setName] = useState("");
+  const [adminName, setAdminName] = useState("");
   const [email, setEmail] = useState("");
+  const [adminEmail, setAdminEmail] = useState("");
   const [memberNumber, setMemberNumber] = useState(allUser?.length);
   const [password, setPassword] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
 
+  const handleAdminSubmit = (event) => {
+    event.preventDefault();
+
+    if (allUser) {
+      const filterAdminUser = allUser.filter((i) => {
+        return (
+          i.userName === adminName &&
+          "rafi" &&
+          i.email === adminEmail &&
+          "rafi789@gmail.com" &&
+          i.password === adminPassword &&
+          "11223344"
+        );
+      });
+
+      if (filterAdminUser.length > 0) {
+        filterAdminUser.map((i) => {
+          if (i?.category === "superAdmin") {
+            localStorage.setItem("login_user", JSON.stringify(i));
+            localStorage.setItem(
+              "mess_member",
+              memberNumber || allUser?.length
+            );
+            navigate("/");
+          }
+          return i;
+        });
+      }
+    }
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+    }
+
+    setValidated(true);
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
+
     if (allUser) {
       const filterUser = allUser.filter((i) => {
         return (
           i.userName === name && i.email === email && i.password === password
         );
       });
-
       if (filterUser.length > 0) {
         filterUser.map((i) => {
-          // if (i.category === "superAdmin") {
-
-          // }
           localStorage.setItem("login_user", JSON.stringify(i));
           localStorage.setItem("mess_member", memberNumber || allUser?.length);
           navigate("/");
@@ -160,9 +196,9 @@ const Login = () => {
                         type="text"
                         placeholder="Enter your name"
                         name="name"
-                        value={name}
+                        value={adminName}
                         onChange={(e) => {
-                          setName(e.target.value);
+                          setAdminName(e.target.value);
                         }}
                       />
                       <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -182,9 +218,9 @@ const Login = () => {
                         type="email"
                         placeholder="Enter your email address"
                         name="email"
-                        value={email}
+                        value={adminEmail}
                         onChange={(e) => {
-                          setEmail(e.target.value);
+                          setAdminEmail(e.target.value);
                         }}
                       />
                       <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -230,7 +266,7 @@ const Login = () => {
                           controlId="validationCustom04"
                         >
                           <Form.Label>
-                            How many member stay in house?
+                            How many member will be allowed in house?
                           </Form.Label>
                           <Form.Control
                             required
@@ -266,9 +302,9 @@ const Login = () => {
                           aria-describedby="inputGroupPrepend"
                           required
                           name="password"
-                          value={password}
+                          value={adminPassword}
                           onChange={(e) => {
-                            setPassword(e.target.value);
+                            setAdminPassword(e.target.value);
                           }}
                         />
                         <Form.Control.Feedback>
@@ -280,7 +316,7 @@ const Login = () => {
                       </InputGroup>
                     </Form.Group>
                   </Row>
-                  <Button type="submit" onClick={handleSubmit}>
+                  <Button type="submit" onClick={handleAdminSubmit}>
                     Login
                   </Button>
                 </Form>

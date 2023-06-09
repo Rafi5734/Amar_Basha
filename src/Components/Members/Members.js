@@ -44,7 +44,7 @@ const Members = () => {
   };
 
   const handleMemberRole = (roleMake, id) => {
-    // console.log((parsingData.category = roleMake));
+    console.log(roleMake);
     makeRole({
       id,
       data: {
@@ -54,7 +54,7 @@ const Members = () => {
   };
 
   const handleManagerRole = (roleMake, id) => {
-    // console.log((parsingData.category = roleMake));
+    console.log(roleMake);
     makeRole({
       id,
       data: {

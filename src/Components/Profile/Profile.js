@@ -17,11 +17,38 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { useGetUsersQuery } from "../../features/api/addUserApiSlice";
 import { useGetMealListQuery } from "../../features/api/mealListApiSlice";
+import { useGetDepositListQuery } from "../../features/api/depositListApiSlice";
+import { useGetBazarListQuery } from "../../features/api/bazarListApiSlice";
 
 const Profile = () => {
   const { data: allUser } = useGetUsersQuery();
   const { data: allMealList } = useGetMealListQuery();
+  const { data: allDepositList } = useGetDepositListQuery();
+  const { data: allBazarList } = useGetBazarListQuery();
   const login_user = JSON.parse(localStorage.getItem("login_user"));
+
+  // console.log(allBazarList);
+
+  const getObjectsByName = (name) => {
+    const filteredArray = allDepositList?.filter((obj) => obj.name === name);
+    return filteredArray;
+  };
+
+  const result = getObjectsByName(login_user?.userName);
+
+  const getObjectsByNameOfBazarList = (name) => {
+    const filteredArrayOfBazarList = allBazarList?.filter(
+      (obj) => obj.name === name
+    );
+    return filteredArrayOfBazarList;
+  };
+
+  const resultOfBazarList = getObjectsByNameOfBazarList(login_user?.userName);
+
+  const sumOfDepositAmount = result?.reduce(
+    (total, obj) => Number(total) + Number(obj.deposit_amount),
+    0
+  );
 
   const values = allMealList?.map((item) => item?.allMeal);
   // console.log("values", values);
@@ -121,7 +148,7 @@ const Profile = () => {
     },
   ];
   return (
-    <div className="bg_primary pb-5" style={{ height: "100vh" }}>
+    <div className="bg_primary pb-5">
       <h1 className="text-center pt-3 pb-3">Profile</h1>
       <Container
         className="mb-3 rounded overflow-auto"
@@ -276,7 +303,8 @@ const Profile = () => {
             className="d-flex justify-content-center align-items-center flex-column"
           >
             <p>
-              Total deposit this month: <span className="">10000</span>
+              Total deposit this month:{" "}
+              <span className="">{sumOfDepositAmount}</span>
             </p>
             <p>
               This month house rent: <span className="">10000</span>
@@ -286,7 +314,8 @@ const Profile = () => {
               <span className="">{sumOfLoginUserMeal}</span>
             </p>
             <p>
-              Total bazar done this month: <span className="">4</span>
+              Total bazar done this month:{" "}
+              <span className="">{resultOfBazarList?.length}</span>
             </p>
           </Col>
         </Row>

@@ -238,7 +238,7 @@ function App() {
                     </Dropdown>
                     <img
                       src="https://dashcode.codeshaper.net/assets/user-1-ad58ce72.jpg"
-                      className="rounded me-0"
+                      className="rounded me-0 ms-2"
                       style={{
                         width: "30px",
                         height: "35px",
@@ -271,15 +271,7 @@ function App() {
                             Profile
                           </Link>
                         </Dropdown.Item>
-                        <Dropdown.Divider />
-                        <Dropdown.Divider />
                         <Dropdown.Item>
-                          {/* <Link
-                            className="text-decoration-none text-light"
-                            to="/logout"
-                          >
-                            Logout
-                          </Link> */}
                           <span onClick={handleLogout}>Logout</span>
                         </Dropdown.Item>
                       </Dropdown.Menu>
@@ -456,12 +448,9 @@ function App() {
                     </Dropdown.Menu>
                     <Dropdown.Divider />
                   </Dropdown>
-                  {/* <Button className="me-5 mb-2" variant="info">
-                    Logout
-                  </Button>{" "} */}
                   <img
                     src="https://dashcode.codeshaper.net/assets/user-1-ad58ce72.jpg"
-                    className="rounded me-0"
+                    className="rounded me-0 ms-2"
                     style={{
                       width: "30px",
                       height: "35px",
@@ -494,15 +483,7 @@ function App() {
                           Profile
                         </Link>
                       </Dropdown.Item>
-                      <Dropdown.Divider />
-                      <Dropdown.Divider />
                       <Dropdown.Item>
-                        {/* <Link
-                          className="text-decoration-none text-light"
-                          to="/logout"
-                        >
-                          Logout
-                        </Link> */}
                         <span onClick={handleLogout}>Logout</span>
                       </Dropdown.Item>
                     </Dropdown.Menu>
@@ -567,14 +548,6 @@ function App() {
                         Deposit-List
                       </Link>
                     </NavDropdown.Item>
-                    {/* <NavDropdown.Item>
-                      <Link
-                        to="/update_deposit_list"
-                        className="me-5 text-white text-decoration-none"
-                      >
-                        Update Deposit-List
-                      </Link>
-                    </NavDropdown.Item> */}
                   </NavDropdown>
                   <Dropdown
                     className="mb-2 me-2"
@@ -686,12 +659,9 @@ function App() {
                     </Dropdown.Menu>
                     <Dropdown.Divider />
                   </Dropdown>
-                  {/* <Button className="me-5 mb-2" variant="info">
-                    Logout
-                  </Button>{" "} */}
                   <img
                     src="https://dashcode.codeshaper.net/assets/user-1-ad58ce72.jpg"
-                    className="rounded me-0"
+                    className="rounded me-0 ms-2"
                     style={{
                       width: "30px",
                       height: "35px",
@@ -725,12 +695,6 @@ function App() {
                         </Link>
                       </Dropdown.Item>
                       <Dropdown.Item>
-                        {/* <Link
-                          className="text-decoration-none text-light"
-                          to="/logout"
-                        >
-                          Logout
-                        </Link> */}
                         <span onClick={handleLogout}>Logout</span>
                       </Dropdown.Item>
                     </Dropdown.Menu>
