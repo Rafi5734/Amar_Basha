@@ -29,6 +29,7 @@ const DepositList = () => {
   const [totalDepositAmount, setTotalDepositAmount] = useState(0);
   const [totalExtraAmount, setTotalExtraAmount] = useState(0);
   const [totalGetAmount, setTotalGetAmount] = useState(0);
+  const [prevFilteredData, setPrevFilteredData] = useState([]);
 
   const { data: allUser } = useGetUsersQuery();
   const [addDeposit] = useAddDepositMutation();
@@ -56,6 +57,23 @@ const DepositList = () => {
     );
     setTotalGetAmount(sumOfTotalGetAmount);
   }, [allDepositList]);
+
+  useEffect(() => {
+    const currentDate = new Date();
+    const previousMonth = currentDate.getMonth() - 1;
+
+    const filteredData = allDepositList?.filter((item) => {
+      const itemDate = new Date(item.date);
+      return (
+        itemDate.getMonth() === previousMonth &&
+        itemDate.getFullYear() === currentDate.getFullYear()
+      );
+    });
+
+    setPrevFilteredData(filteredData);
+  }, [allDepositList]);
+
+  console.log(prevFilteredData);
 
   const handleSubmit = (event) => {
     event.preventDefault();
