@@ -40,7 +40,7 @@ const UpdateDeposit = () => {
       },
     });
 
-    navigate("/bazar_list");
+    navigate("/deposit_list");
   };
   return (
     <div>

@@ -16,6 +16,7 @@ import { useState } from "react";
 import "./depositList.css";
 import {
   useAddDepositMutation,
+  useDeleteAllPreviousDepositListMutation,
   useGetDepositListQuery,
 } from "../../features/api/depositListApiSlice";
 import { useGetUsersQuery } from "../../features/api/addUserApiSlice";
@@ -29,11 +30,12 @@ const DepositList = () => {
   const [totalDepositAmount, setTotalDepositAmount] = useState(0);
   const [totalExtraAmount, setTotalExtraAmount] = useState(0);
   const [totalGetAmount, setTotalGetAmount] = useState(0);
-  const [prevFilteredData, setPrevFilteredData] = useState([]);
 
   const { data: allUser } = useGetUsersQuery();
   const [addDeposit] = useAddDepositMutation();
   const { data: allDepositList, isFetching } = useGetDepositListQuery();
+  const [deleteAllPreviousDepositList] =
+    useDeleteAllPreviousDepositListMutation();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -58,22 +60,36 @@ const DepositList = () => {
     setTotalGetAmount(sumOfTotalGetAmount);
   }, [allDepositList]);
 
-  useEffect(() => {
-    const currentDate = new Date();
-    const previousMonth = currentDate.getMonth() - 1;
+  // const getPreviousMonthData = () => {
+  //   const currentDate = new Date();
+  //   const previousMonth = currentDate.getMonth() - 1;
+  //   const previousMonthData = allDepositList?.filter((entry) => {
+  //     const entryDateParts = entry.date.split("/");
+  //     const entryMonth = parseInt(entryDateParts[1]) - 1;
+  //     const entryYear = parseInt(entryDateParts[2]);
+  //     return (
+  //       entryYear === currentDate.getFullYear() && entryMonth === previousMonth
+  //     );
+  //   });
+  //   return previousMonthData;
+  // };
 
-    const filteredData = allDepositList?.filter((item) => {
-      const itemDate = new Date(item.date);
-      return (
-        itemDate.getMonth() === previousMonth &&
-        itemDate.getFullYear() === currentDate.getFullYear()
-      );
-    });
+  // const previousMonthData = getPreviousMonthData();
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
 
-    setPrevFilteredData(filteredData);
-  }, [allDepositList]);
+  const previousMonthData = allDepositList?.filter((item) => {
+    const [day, month, year] = item.date.split("/");
+    const itemDate = new Date(year, month - 1, day);
 
-  console.log(prevFilteredData);
+    return (
+      itemDate.getMonth() === currentMonth - 1 &&
+      itemDate.getFullYear() === currentYear
+    );
+  });
+
+  console.log(previousMonthData);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -92,7 +108,9 @@ const DepositList = () => {
     setDepositAdd({ ...depositAdd, [e.target.name]: e.target.value });
   };
 
-  const handleDeleteAll = (e) => {
+  const handleDeleteAll = () => {
+    // console.log(previousMonthData);
+    deleteAllPreviousDepositList(previousMonthData);
     console.log("deleteAll");
   };
 

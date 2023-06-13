@@ -3,8 +3,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const depositListApiSlice = createApi({
   reducerPath: "depositList",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8000",
-    // baseUrl: `${process.env.REACT_APP_MESS_APP_BASE_URL}`,
+    // baseUrl: "http://localhost:8000",
+    baseUrl: `${process.env.REACT_APP_MESS_APP_BASE_URL}`,
   }),
   tagTypes: ["deposit_list"],
 
@@ -39,6 +39,14 @@ export const depositListApiSlice = createApi({
       }),
       invalidatesTags: ["deposit_list"],
     }),
+    deleteAllPreviousDepositList: builder.mutation({
+      query: (previousMonthData) => ({
+        url: "/deposit_list/delete_previous",
+        method: "DELETE",
+        body: previousMonthData,
+      }),
+      invalidatesTags: ["deposit_list"],
+    }),
   }),
 });
 
@@ -47,4 +55,5 @@ export const {
   useGetDepositListQuery,
   useGetSingleDepositQuery,
   useUpdateSingleDepositMutation,
+  useDeleteAllPreviousDepositListMutation,
 } = depositListApiSlice;
