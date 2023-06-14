@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Container } from "react-bootstrap";
+import React, { useState, useRef } from "react";
+import { Container, Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -8,6 +8,7 @@ import Row from "react-bootstrap/Row";
 import { useGetUsersQuery } from "../../features/api/addUserApiSlice";
 import { useNavigate } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
+import emailjs from "@emailjs/browser";
 
 const Login = () => {
   const { data: allUser, isLoading } = useGetUsersQuery();
@@ -21,6 +22,36 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const form = useRef();
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        "service_75hoxfm",
+        "template_574ifsu",
+        form.current,
+        "BZE2Y3xOG53-NSKI2"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          alert(
+            "Please follow up your providing email address to get credentials"
+          );
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
+  };
 
   const handleAdminSubmit = (event) => {
     event.preventDefault();
@@ -330,6 +361,65 @@ const Login = () => {
               id="custom-switch"
               label="Are you member?"
             />
+
+            <Button variant="primary" className="mt-2" onClick={handleShow}>
+              Request for Admin
+            </Button>
+
+            <Modal show={show} onHide={handleClose}>
+              <Modal.Header style={{ backgroundColor: "#1e293b" }} closeButton>
+                <Modal.Title>Request for becoming an admin</Modal.Title>
+              </Modal.Header>
+              <Modal.Body style={{ backgroundColor: "#1e293b" }}>
+                <Form ref={form} onSubmit={sendEmail}>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput0"
+                  >
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="user_name"
+                      placeholder="Enter a name"
+                      autoFocus
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="user_email"
+                      placeholder="name@example.com"
+                      autoFocus
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlTextarea1"
+                    name="message"
+                  >
+                    <Form.Label>Message</Form.Label>
+                    <Form.Control as="textarea" name="message" rows={3} />
+                  </Form.Group>
+                  <Modal.Footer style={{ backgroundColor: "#1e293b" }}>
+                    <Button variant="secondary" onClick={handleClose}>
+                      Close
+                    </Button>
+                    <Button
+                      type="submit"
+                      value="Send"
+                      variant="primary"
+                      onClick={handleClose}
+                    >
+                      Send request
+                    </Button>
+                  </Modal.Footer>
+                </Form>
+              </Modal.Body>
+            </Modal>
           </Container>
         </>
       )}
