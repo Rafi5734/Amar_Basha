@@ -3,14 +3,26 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const addUserApiSlice = createApi({
   reducerPath: "addUser",
   baseQuery: fetchBaseQuery({
-    // baseUrl: "http://localhost:8000",
-    baseUrl: `${process.env.REACT_APP_MESS_APP_BASE_URL}`,
+    baseUrl: "http://localhost:8000",
+    // baseUrl: `${process.env.REACT_APP_MESS_APP_BASE_URL}`,
   }),
   tagTypes: ["add_user"],
   endpoints: (builder) => ({
     addUser: builder.mutation({
       query: (user) => ({
         url: "/add_user",
+        headers: {
+          "content-type": "application/json",
+        },
+        method: "POST",
+        body: user,
+      }),
+      invalidatesTags: ["add_user"],
+    }),
+
+    addAdminUser: builder.mutation({
+      query: (user) => ({
+        url: "/add_user/admin",
         headers: {
           "content-type": "application/json",
         },
@@ -61,6 +73,7 @@ export const addUserApiSlice = createApi({
 export const {
   useGetUsersQuery,
   useAddUserMutation,
+  useAddAdminUserMutation,
   useGetSingleUserQuery,
   useUpdateSingleUserMutation,
   useDeleteUserMutation,

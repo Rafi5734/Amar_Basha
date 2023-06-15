@@ -25,6 +25,7 @@ import AddNewMeal from "./Components/MealList/AddNewMeal";
 import UpdateBazarList from "./Components/BazarList/UpdateBazarList/UpdateBazarList";
 import Questionary from "./Pages/Questionaries/Questionary";
 import Test from "../src/Components/MealList/test";
+import AdminLogin from "./Services/Login/AdminLogin";
 // import { useGetUsersQuery } from "./features/api/logInApiSlice";
 
 function App() {
@@ -760,6 +761,7 @@ function App() {
           <Route path="/update_profile" element={<UpdateProfile />}></Route>
           <Route path="/logout" element={<Logout />}></Route> */}
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/admin_login" element={<AdminLogin />}></Route>
         <Route path="/question" element={<Questionary />}></Route>
         <Route path="/test" element={<Test />}></Route>
       </Routes>
