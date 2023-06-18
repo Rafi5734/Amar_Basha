@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Container } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Container, Placeholder } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import "../../assets/global.css";
 import "./style.css";
@@ -17,10 +17,56 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import io from "socket.io-client";
+import { useGetMealListQuery } from "../../features/api/mealListApiSlice";
+import { useGetBazarListQuery } from "../../features/api/bazarListApiSlice";
 
 const Dashboard = () => {
-  // const [message, setMessage] = useState("");
-  const percentage = 41.5;
+  const [countTotalMeal, setCountTotalMeal] = useState([]);
+  const [countBazarCost, setCountBazarCost] = useState([]);
+
+  const { data: allMealList, isFetching } = useGetMealListQuery();
+  const { data: allBazarList } = useGetBazarListQuery();
+
+  const percentage = (countBazarCost / countTotalMeal).toFixed(2);
+
+  console.log(percentage);
+
+  useEffect(() => {
+    const sumAllMeals = (array) => {
+      const mealKeys = Object.keys(array[0]?.allMeal || {});
+      const totalMeals = mealKeys.reduce((acc, key) => {
+        const sum = array.reduce((sum, obj) => {
+          const mealValue = obj?.allMeal?.[key] || 0;
+          return sum + Number(mealValue);
+        }, 0);
+        return { ...acc, [key]: sum };
+      }, {});
+      return totalMeals;
+    };
+
+    const totalMeals = sumAllMeals(allMealList || []);
+    const sumOfAllMeal = Object.entries(totalMeals).map(([key, value]) => {
+      return value;
+    });
+
+    const finalSumOfAllMeal = sumOfAllMeal.reduce(
+      (accumulator, currentValue) => {
+        return accumulator + currentValue;
+      },
+      0
+    );
+
+    setCountTotalMeal(finalSumOfAllMeal);
+
+    const sumOfAmount = allBazarList?.reduce(
+      (sum, user) => sum + Number(user.amount),
+      0
+    );
+    setCountBazarCost(sumOfAmount);
+  }, [allMealList, allBazarList]);
+
+  // console.log("count total meal: ", countTotalMeal);
+  // console.log("count total bazar cost: ", countBazarCost);
 
   useEffect(() => {
     const socket = io("http://localhost:8000"); // Replace with your server URL
@@ -91,19 +137,36 @@ const Dashboard = () => {
               <p className="fs-5 fw-bold">67</p>
             </div>
           </div>
+
           <div
             className="rounded p-3 mb-3"
             style={{ backgroundColor: "#1e293b" }}
           >
             <div className="rounded p-3" style={{ backgroundColor: "#0f172a" }}>
               <p>Today Meal Rate</p>
-
-              <PieChart label={`${percentage} tk`}>
-                <CircularProgressbar
-                  value={percentage}
-                  text={`${percentage}%`}
-                />
-              </PieChart>
+              {isFetching ? (
+                <>
+                  <Placeholder as="p" animation="glow">
+                    <Placeholder
+                      style={{
+                        width: "100%",
+                        height: "100px",
+                        borderRadius: "5px",
+                      }}
+                      xs={12}
+                    />
+                  </Placeholder>
+                </>
+              ) : (
+                <>
+                  <PieChart label={`${percentage} tk`}>
+                    <CircularProgressbar
+                      value={percentage}
+                      text={`${percentage}%`}
+                    />
+                  </PieChart>
+                </>
+              )}
             </div>
           </div>
           <div

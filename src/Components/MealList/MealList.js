@@ -21,6 +21,7 @@ const MealList = () => {
   const [allMemberMeal, setAllMemberMeal] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [csvMealData, setCSVMealData] = useState([]);
+  // const [finalSumOfAllMeals, setFinalSumOfAllMeals] = useState([]);
 
   const totalMessMember = localStorage.getItem("mess_member");
 
@@ -91,7 +92,7 @@ const MealList = () => {
 
     const totalMeals = sumAllMeals(allMealList || []);
     setAllMemberMeal(totalMeals);
-  }, [allMealList, allUser]);
+  }, [allMealList]);
 
   useEffect(() => {
     const csvData = Object.entries(allMemberMeal).map(([key, value]) => ({
@@ -101,6 +102,17 @@ const MealList = () => {
 
     const mealValue = csvData.map((value) => value.data);
     setCSVMealData(String(mealValue));
+
+    // const sumOfAllMeal = Object.entries(allMemberMeal).map(([key, value]) => {
+    //   return value;
+    // });
+
+    // const finalSumOfAllMeal = sumOfAllMeal.reduce(
+    //   (accumulator, currentValue) => {
+    //     return accumulator + currentValue;
+    //   },
+    //   0
+    // );
   }, [allMemberMeal]);
 
   const headerKeys = Object.keys(allMemberMeal);
