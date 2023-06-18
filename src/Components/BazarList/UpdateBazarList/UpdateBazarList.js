@@ -12,6 +12,7 @@ import {
   useGetSingleBazarQuery,
   useUpdateSingleBazarMutation,
 } from "../../../features/api/bazarListApiSlice";
+import "./updateBazarList.css";
 export default function UpdateBazarList() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -47,7 +48,7 @@ export default function UpdateBazarList() {
   };
   return (
     <div>
-      <div className="bg_primary add_member_form">
+      <div className="bg_primary update_bazarList_form">
         <Container>
           <div>
             <h1 className="text-center pt-3 pb-3">Update bazar list info</h1>
