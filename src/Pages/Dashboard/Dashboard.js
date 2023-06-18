@@ -176,7 +176,7 @@ const Dashboard = () => {
             <div className="rounded p-3" style={{ backgroundColor: "#0f172a" }}>
               <p>Today Bazar Time</p>
               <p className="fs-5 fw-bold">
-                Name: <span>Asif</span>
+                Name: <span>Next</span>
               </p>
             </div>
           </div>
