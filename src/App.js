@@ -54,7 +54,7 @@ function App() {
         <Container>
           <Navbar.Brand>
             <Link className="text-decoration-none" to="/">
-              <p className="logo_name text-info fw-bold fs-3">Amar Basha</p>
+              <p className="logo_name text-info fw-bold fs-3">The Hollys</p>
             </Link>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
